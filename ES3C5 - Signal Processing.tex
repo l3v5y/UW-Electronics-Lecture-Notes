@@ -1,0 +1,371 @@
+\documentclass[11pt]{article} % use larger type; default would be 10pt
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{geometry} % to change the page dimensions
+\geometry{a4paper} % or letterpaper (US) or a5paper or....
+\geometry{margin=1in}
+\usepackage{circuitikz}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{fancyhdr} % This should be set AFTER setting up the page geometry
+\pagestyle{fancy} % options: empty , plain , fancy
+\renewcommand{\headrulewidth}{0pt} % customise the layout...
+\lhead{ES3C5}\chead{}\rhead{Signal Processing}
+\lfoot{}\cfoot{\thepage}\rfoot{}
+
+
+\usepackage{amsthm}
+
+\theoremstyle{definition}
+\newtheorem{example}{Example}[subsection]
+
+\begin{document}
+
+\section{Signals}
+	\begin{itemize}
+	\item A quantity that can be varied to convey information
+	\item Converted into electrical form using a transducer
+	\item e.g. sine waves
+		
+	\end{itemize}
+
+	\begin{figure}[h]
+		\begin{tikzpicture}
+			\draw (0,0) -- (1,0) -- (1,1) -- (2,1) --(2,0) -- (3,0);
+		\end{tikzpicture}
+		\centering
+		\caption{A square wave for some reason}
+	\end{figure}
+
+\subsection{Laplace transforms (LT)}
+	\begin{itemize}
+	\item For modelling a linear sstem sing a transfer function
+	\item LT of function $f(t)$ in time domain is
+		\begin{equation}
+			F(s) = \int^\infty _0 f(t)e^{-st}dt =\mathcal{L}\{f(t)\}
+		\end{equation}
+		with laplace variable $s = \sigma j\omega$ with dimension $time^{-1}$
+	\end{itemize}
+
+\begin{example}
+	\begin{equation}
+		f(t) =  e^{\alpha t} 
+	\end{equation}
+	\begin{eqnarray}
+		F(s) &=& \int^\infty_0 e^{\alpha t} e^{-st} dt = \mathcal{L}\{f(t)\} \nonumber \\
+		&=& \int^\infty_0 e^{-(s-\alpha)t} dt \nonumber \\
+		&=& -\frac{1}{s-\alpha}\left[{e^{-(s-\alpha)t}}\right]_0^\infty \nonumber \\
+		&=& \frac{1}{s-\alpha}
+	\end{eqnarray}
+\end{example}
+\subsection{Inverse LT}
+	\begin{itemize}
+		\item $\mathcal{L}^{-1} F(s)=f(t)$
+		\item F(s) and  f(t) are LT pairs
+		\item Obtained using partial fraction method and table of LT pairs
+	\end{itemize}
+
+\begin{example}
+	Determine the signal given
+		\begin{eqnarray}
+			F(s) &=& \frac{s+4}{s(s+2)} \nonumber \\
+			&&\mbox{using partial fraction method} \nonumber \\
+			F(s) &=& \frac{2}{s} - \frac{1}{s+2} \nonumber \\
+			&&\mbox{from databook table 1.1 2nd \& 4th rows} \nonumber \\
+			f(t)&=&2u(t)-e^{-2t}
+		\end{eqnarray}
+		for $t\ge$ 0, where $u(t)$ is a unit step
+
+	\begin{figure}[h]
+		\begin{tikzpicture}
+			\draw (0,0) -- (1,0)  -- (1,1) node [left] {$1$} -- (2,1) -- (4,1);
+			\draw[->] (0,0) -> (4,0) node [below right] {$x$};
+		\end{tikzpicture}
+		\centering
+		\caption{}
+	\end{figure}
+\end{example}
+
+\subsection{Properties of LT}
+	\begin{description}
+		\item[Property 1] if $x(t)\leftrightarrow X(s)$ and $y(t)\leftrightarrow Y(s)$ then $x(t)+-y(t) \leftrightarrow X(s)+- Y(s)$
+		\item[Property 2] if $x(t)\leftrightarrow X(s)$  and $K$ is constant, then $Kx(t)\leftrightarrow KX(s)$
+
+\begin{example}
+		Determine LT of $v(t) = 3cos4t$
+		From table 1.1 7th row
+			\begin{equation}
+				\mathcal{L}\{cos\omega t\} = \frac{s}{s^2+\omega^2}
+			\end{equation}
+		i.e., $\omega=4$, and using property 2 gives
+			\begin{equation}
+				 V(s) =  \frac{3s}{s^2+16}
+			\end{equation}
+		\item[Property 3] Derivatives
+			\begin{equation}
+				\mathcal{L}\left\{\frac{d^nf(t)}{dt^n}\right\} = s^n  F(s) -s^{n-1}f(0)-s^{n-2}f^1(0)  ...  f^{n-1}(0)
+			\end{equation}
+			where $f^n(t)$ denotes the n\textsuperscript{th} derivative of f(t)
+		Assume quiescent state, i.e. all system variables and their derivatives are 0 at $t=0$,
+			\begin{equation}
+				\mathcal{L}\left\{\frac{d^nf(t)}{dt^n}\right\}  = s^nF(s)
+			\end{equation}
+		valid assumption in all practical systems (no power$\rightarrow$off)
+\end{example}
+\begin{example}	
+			Given $$\tau \frac{dy(t)}{dt}+y(t) = kx(t)$$  where $x(t)$ and $y(t)$ are input and output of a system respectively.
+			\begin{equation}
+				\tau s Y(s) + Y(s) = kX(s) \\
+				Y(s) = X(s)\left[\frac{k1}{1+s^\tau }\right]
+			\end{equation}
+\end{example}
+		\item[Property 4] Integration
+			\begin{equation}
+				\int^t_0f(t)dt\leftrightarrow \frac{F(s)}{s}
+			\end{equation}
+
+		\item[Property 5] Time-shift (delay)
+			\begin{equation}
+				\mathcal{L}\left\{f(t-T)\right\}=e^{-sT}F(s)
+			\end{equation}
+		\item[Property 6]
+			If $\mathcal{L}\{f(t)\}=F(s)$
+			then $\mathcal{L}\{e^{at}f(t)\} = F(s-a)$
+	\end{description}
+
+
+
+\section{Laplace transfer function (TF)}
+\begin{itemize}
+\item For a linear and stationary system
+\begin{equation}
+TF = \frac{\mathcal{L}\{output\}}{\mathcal{L}\{input\}}
+\end{equation}
+ie $\mathcal{L}\{output\} = TF x \mathcal{L}\{input\}$
+
+with all intitial conditions assymed zero.
+\item TF describes the dynamics of the system
+
+\end{itemize}
+A linear system obeys the principle of superposition, i.e. if $x_1 \rightarrow y_1$ and $x_2\rightarrow y_2$ then $x_1+x_2 \rightarrow y_1 + y_2$ where $x_n$ and $y_n$ are respectively the input and output of the sytem.
+
+\subsection{Resistors}
+\begin{figure}[h]
+
+\begin{circuitikz}
+	\draw
+	(0,2) 
+	to[short,o-*] (2,2) 
+	node[anchor=west,above right]{$i(t)$}
+	to[R, l=$R$,*-*] (2,0)
+	to[short,*-o] (0,0);
+	\draw[->] (0,0.3) --(0,1) node[left]{$v(t)$} --  (0,1.7);
+\end{circuitikz}
+\centering
+\caption{Simple resistor network}
+\end{figure}
+
+\begin{equation}
+v(t) = Ri(t)
+\end{equation}
+
+taking LT and assume zero initial conditions 
+\begin{equation}
+V(s) =RI(s)
+\end{equation}
+\subsection{Capacitors}
+
+\begin{figure}[h]
+\begin{circuitikz}
+	\draw
+	(0,2)
+	to[short,o-*] (2,2) 
+	node[anchor=west,above right]{$i(t)$}
+	to[C, l=$C$,*-*] (2,0)
+	to[short,*-o] (0,0);
+	\draw[->] (0,0.3) --(0,1) node[left]{$v(t)$} --  (0,1.7);
+
+\end{circuitikz}
+\centering
+\caption{Simple capacitor network}
+\end{figure}
+\begin{equation}
+v(t) = \frac{1}{C}\int i(t) dt
+\end{equation}
+Taking LT and assume zero initial conditions
+\begin{equation}
+V(s) = \frac{I(s)}{sC}
+\end{equation}
+
+\subsection{Inductors}
+
+\begin{figure}[h]
+\begin{circuitikz}
+	\draw
+	(0,2)
+	to[short,o-*] (2,2) 
+	node[anchor=west,above right]{$i(t)$}
+	to[L, l=$L$,*-*] (2,0)
+	to[short,*-o] (0,0);
+	\draw[->] (0,0.3) --(0,1) node[left]{$v(t)$} --  (0,1.7);
+\end{circuitikz}
+\centering
+\caption{Simple inductor network}
+\end{figure}
+\begin{equation}
+v(t) = L\frac{di(t)}{dt}
+\end{equation}
+Take LT and assume zero initial conditions
+\begin{equation}
+V(s) = sLI(s)
+\end{equation}
+
+\subsection{Kirchoff's Laws}
+\begin{enumerate}
+\item The total current flowing towards a node is equal to the total current flowing from that node
+\item In a closed circuit, the algebraic sum of the products of the current and the resistance of each part of the circuit is equal to the resultant e.m.f. in the circuit. 
+
+Alternatively, in a given loop, the sum of voltage rises is equal to the sum of voltage drops.
+
+\end{enumerate}
+The TF of a system can be found by finding the LT of each componenent and applying Kirchoff's laws.
+
+\begin{example}
+	See Fig. \ref{ex:int}
+	\begin{figure}[h]
+		\begin{circuitikz}
+			\draw 	(0,2)
+			to[R,l=$R$,o-*] (3,2) 
+			to[C, l=$C$,*-*] (3,0)
+			to[short,*-o] (0,0);
+
+			\draw (3,2) to[short,*-o ](5,2);
+			\draw (3,0) to[short,*-o] (5,0);
+
+			\draw[->] (0,0.3) --(0,1) node[left]{$v_i(t)$} --  (0,1.7);
+			\draw[->] (5,0.3) --(5,1) node[right]{$v_o(t)$} --  (5,1.7);
+		\end{circuitikz}
+		\centering
+		\caption{An integrating circuit}
+		\label{ex:int}
+	\end{figure}
+
+	\begin{equation}
+		V_0(s)=\frac{I(s)}{sC}
+	\end{equation}
+From 2nd law,
+	\begin{equation}
+		V_i(s)=RI(s)+\frac{I(s)}{sC}
+	\end{equation}
+TF
+	\begin{eqnarray}
+		\frac{V_o}{V_i}&=&\frac{\frac{I(s)}{sC}}{RI(s)+\frac{I(s)}{sC}} \nonumber\\
+		&=& \frac{1}{sRC+1}
+	\end{eqnarray}
+\end{example}
+\begin{example}
+	See Fig. \ref{ex:electnet}
+	\begin{figure}[h]
+		\begin{circuitikz}
+			\draw 	(0,2)
+			to[R,l=$R_1$,o-*] (3,2) 
+			to[C, l=$C$,*-*] (3,0)
+			to[short,*-o] (0,0);
+			\draw (3,2) 
+			to[L,*-*] (6,2)
+			to[R, l=$R_2$,*-*] (6,0)
+			to[short,*-*] (3,0);
+
+			\draw (6,2) to[short,*-o ](8,2);
+			\draw (6,0) to[short,*-o] (8,0);
+
+
+			\draw[<-] (2.5,0.3) --(2.5,1) node[left]{$i_1(t)$} --  (2.5,1.7);
+			\draw[<-] (5.5,0.3) --(5.5,1) node[left]{$i_2(t)$} --  (5.5,1.7);
+
+			\draw[->] (0,0.3) --(0,1) node[left]{$v_i(t)$} --  (0,1.7);
+			\draw[->] (8,0.3) --(8,1) node[right]{$v_o(t)$} --  (8,1.7);
+		\end{circuitikz}
+		\centering
+		\caption{An example electrical network}
+		\label{ex:electnet}
+	\end{figure}
+
+Applying 2nd law to 1st loop,
+\begin{equation}
+V_i(s)=R_1I_1(s)+\frac{I_1(s)}{sC}-\frac{I_2(s)}{sC}
+\end{equation}
+Applying 2nd law to 2nd loop,
+\begin{equation}
+\frac{I_2(s)}{sC} - \frac{I_1(s)}{sC} + sLI_2(s)+R_2I_2(s)=0
+\end{equation}
+\end{example} 
+Solving simultaneously,
+\begin{equation}
+V_i(s)=I_2(s)\left( s^2LCR_1+s\left[ CR_1R_2+L\right] + \left[R_1+R_2\right]\right)
+\end{equation}
+note
+\begin{equation}
+V_o(S)=R_2I_2(s)
+\end{equation}
+$\therefore$ TF is
+\begin{equation}
+\frac{V_o}{V_i} = \frac{R_2}{s^2LCR_1+s\left[ CR_1R_2+L\right] + \left[R_1+R_2\right]}
+\end{equation}
+
+\section{Test signals and dynamic response}
+\subsection{Unit step input}
+	\begin{figure}[h]
+		\begin{tikzpicture}
+			\draw (0,0) -- (1,0) node[below]{$0$} -- (1,1) node [left] {$1$} -- (2,1) -- (4,1) node[right]{$x(t)$};
+			\draw[->] (0,0) -- (4,0) node[below right]{$x$};
+		\end{tikzpicture}
+		\centering
+		\caption{Step response}
+	\end{figure}
+\begin{equation}
+X(s)=\frac{1}{s}
+\end{equation}
+\begin{example}
+Given $H(s)=\frac{1}{1+\tau s}$ (a servo)
+\begin{eqnarray}
+Y(s) &=& \frac{1}{1+\tau s} \times \frac{1}{s} \nonumber \\
+&=& \frac{\frac{1}{\tau}}{s\left( s+ \frac{1}{\tau}\right)}
+\end{eqnarray}
+
+\begin{figure}[h]
+	\centering
+	\caption{Dynamic response of a servo when subject to a unit step}
+\end{figure}
+
+\end{example}
+
+
+\subsection{Unit ramp input}
+\begin{figure}[h]
+	\centering
+	\caption{Dynamic response of a servo when subject to a unit step}
+\end{figure}
+Where $\tan {(\theta)} = 1$ ie
+\begin{eqnarray}
+x(t) &=& t \nonumber \\
+X(s) &=& \frac{1}{s^2}
+\end{eqnarray}
+
+\begin{example}
+
+Given $H(s) = \frac{1}{1+\tau s}$
+\begin{eqnarray}
+Y(s) &=& \frac{1}{1+\tau s} \times \frac{1}{s^2}  \nonumber  \\
+&=& \frac{\tau}{s+\frac{1}{\tau} - \frac{\tau}{s} + \frac{1}{s^2}}
+\end{eqnarray}
+
+Thus,
+\begin{eqnarray}
+y(t) &=& \tau e^{-\frac{t}{\tau}} - \tau + t \nonumber \\
+&=& t-\tau\left(1-e^{-\frac{t}{\tau}}\right)
+\end{eqnarray}
+\end{example}
+\end{document}
