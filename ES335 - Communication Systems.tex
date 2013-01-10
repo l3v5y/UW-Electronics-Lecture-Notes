@@ -43,8 +43,8 @@ $f_m$ or ($\omega_m = 2 \pi f_m$) is a simple sine/cosine wave modulation functi
 
 Expanding $f(t)$:-
 \begin{eqnarray}
-f(t) &=A_0 \cos \omega_0t + A_0m \cos\omega_mt x \cos \omega_0 t \nonumber \\
-&= A_0 \cos\omega_0t+\frac{A_0m}{2} \cos(\omega_m+\omega_0)t+\cos(\omega_0-\omega_m)t
+f(t) &=& A_0 \cos \omega_0t + A_0m \cos\omega_mt x \cos \omega_0 t \nonumber \\
+&=& A_0 \cos\omega_0t+\frac{A_0m}{2} \cos(\omega_m+\omega_0)t+\cos(\omega_0-\omega_m)t
 \end{eqnarray}
 	\begin{figure}[h]
 		\begin{tikzpicture}
@@ -83,7 +83,7 @@ Going back to equation \ref{eqn:power}  in the limit $m=1$ and so the ratio is:-
 \end{equation}
 $\frac{2}{3}$ of the transmitted power is wasted.
 
-Typically, $m\approx 4$ from which we have:-
+Typically, $m\approx 0.4$ from which we have:-
 \begin{equation}
 \frac{0.5\times 0.4^2}{(0.5\times 0.4^)+1} = \frac{0.08}{0.08+1}
 \end{equation}
@@ -109,6 +109,7 @@ Detecting AM requires an envelope detector in its simplest form:-
 	\draw (3,2) to[short, *-o] (5.5,2);
 	\draw (3,0) to[short, *-o] (5.5,0);
 \end{circuitikz}
+\caption{Simple envelope detector}
 \end{figure}
 
 A more advanced envelope detector adds a low pass filter to remove high frequency components from the carrier wave.
@@ -124,32 +125,31 @@ A more advanced envelope detector adds a low pass filter to remove high frequenc
 	\draw (3,0) to[short, *-o] (7.5,0);
 	\draw (5.5,0) to[C,*-*] (5.5,2);
 \end{circuitikz}
+\caption{More advanced envelope detector using smoothing}
 \end{figure}
 
 If the carrier frequency is high compared to the modulation frequency, the recovered envelope is a "quite good" approximation to the original given a certain combination of $R_L$ and $C$.
 
-\section{Lecture \ref{sec:lec2} - }
+
+\section{Lecture \ref{sec:lec2} - Double Sideband and Single Sideband AM}
 \label{sec:lec2}
-\subsection{Double Sideband and Single Sideband AM}
-Recall AM signal (Equation \ref{eqn:am})
 
-Power is wasted in carrier, so a better form of A.M. could be:-
-\begin{equation}
-f(t) = A_0 \times \cos{\omega_0} \times m\cos{\omega_m t}
-\end{equation}
-Where $m=\frac{A_m}{A_0}$ = modulating depth
-$A_m$ = amplitide of mudlationg signal
+	Recall AM signal (Equation \ref{eqn:am}. Power is wasted in the carrier, so a better form of A.M. could be:-
+	\begin{equation}
+		f(t) = A_0 \cdot \cos{\omega_0} \cdot m\cos{\omega_m t}
+	\end{equation}
+	Where $m=\frac{A_m}{A_0} = \mbox{modulating depth}$ and $A_m = \mbox{amplitide of modulating signal}$
 
-\begin{equation}
-f(t) = \left(\frac{A_0m}{2}\right)
-\left(\cos{(\omega_0  \omega_m)}t+\cos{(\omega_0 - \omega_m)}\right)
-\end{equation}
+	\begin{equation}
+		f(t) = \left(\frac{A_0m}{2}\right)
+		\left(\cos{(\omega_0 +  \omega_m)t}+\cos{(\omega_0 - \omega_m)t}\right)
+	\end{equation}
 
-This is known as double sided sideband, supressed carrier (DSB).
+	This is known as double sided sideband, supressed carrier (DSB).
 
-There is an important property of a DSB $\rightarrow$ for no modulation, no signal is sent, so that it is very power effiicient, but not badnwidth efficient.
+	There is an important property of a DSB $\rightarrow$ for no modulation, no signal is sent, so that it is very power effiicient, but not bandwidth efficient.
 
-\begin{figure}[h]
+	\begin{figure}[h]
 		\begin{tikzpicture}
 			\draw[->] (1,0) node [below]{$(f_0-f_m)$} -- (1,1) node [above left] {$(\frac{A_0m}{2})$};
 			\draw[->] (7,0) node [below]{$(f_0+f_m)$} -- (7,1) node [above right] {$(\frac{A_0m}{2})$};
@@ -161,26 +161,52 @@ There is an important property of a DSB $\rightarrow$ for no modulation, no sign
 			\draw[<->] (7,0.5)--(4,0.5);
 		\end{tikzpicture}
 		\centering
-		\caption{Spectrum of an AM signal, including sidebands}
+		\caption{Spectrum of a DSB signal}
 	\end{figure}
 
 
-The envelope of a DSB signal for a single frequency of modulation is:-
-\begin{figure}[h]
-	\begin{tikzpicture}
-		\draw[->] (0,0)--(6.28,0);
-		\draw (0,0) -- (6.28,6.28);
-		\draw[color=red,domain=0:6.28,samples=200,smooth] plot (\x,{sin(\x)});
-	\end{tikzpicture}
-\end{figure}
+	The envelope of a DSB signal for a single frequency of modulation is:-
+	\begin{figure}[h]
+		\centering
+		\begin{tikzpicture}[yscale=1.3]
+			\draw[<->](0,1) --  (0,0)--(2*pi,0);
+			\draw[color=red,domain=0:2*pi,samples=200,smooth] plot (\x,{sin(\x r)});
+			\draw[color=green,domain=0:2*pi,samples=200,smooth] plot (\x,{-sin(\x r)});
+		\end{tikzpicture}
+		\caption{DSB Signal envelope}
+	\end{figure}
 
-Because there is no carrier present, the envelope of the DSB waveform no longer represents the modulating function, therefore an envelope detector cannot be used to detect it - a product detector is used instead.
+	Because there is no carrier present, the envelope of the DSB waveform no longer represents the modulating function, therefore an envelope detector cannot be used to detect it - a product detector is used instead.
 
 To illustrate the operation, instead of a DSB being the input, simply use a carrier frequency with no modulation
+	\begin{figure}[h]
+		\begin{tikzpicture}
+			\draw[->] (0,0) node[left]{DSB} -- (1,0);
+			\draw (1,-1) rectangle (3,1);
+			\draw[thick, -] ( 1.7,0.3) -- (2.3,-0.3);
+			\draw[thick, -] ( 2.3,0.3) -- (1.7,-0.3);
+			\draw[->] (2,-2) node[below]{Local carrier source at $\omega_0$/$f_0$} -- (2,-1);
+			\draw[->](3,0) --(4, 0);
+		\end{tikzpicture}
+		\centering
+		\caption{Product detector/mixer/multiplexer with simple input}
+	\end{figure}
+
+The output after filtering is $\left(\frac{A_0E}{2}\right)$ which is proportinal to $A_0$, the signal amplitude.
 
 
-
-The output after filtering is $\left(\frac{A_0E}{2}\right)$ which is proportinal to $A_0$, the signl amplitude.
+		\begin{figure}[h]
+		\begin{tikzpicture}
+			\draw[->] (0,0) node[ left]{$A_0\cos{\omega_0t}$} -- (1,0);
+			\draw (1,-1) rectangle (3,1);
+			\draw[thick, -] ( 1.7,0.3) -- (2.3,-0.3);
+			\draw[thick, -] ( 2.3,0.3) -- (1.7,-0.3);
+			\draw[->] (2,-2) node[below]{$E\cos{\omega_0t}$} -- (2,-1);
+			\draw [->](3,0) --(4, 0) node[right]{$A_0\cdot E\cdot \cos^2{\omega_0 t}$};
+		\end{tikzpicture}
+		\centering
+		\caption{Product detector/mixer/multiplexer with real input}
+	\end{figure}
 
 Replace the simple input by:-
 \begin{equation}
@@ -198,7 +224,7 @@ After low pass filtering to remove all frequences above $\omega_m$:-
 OP = \left(\frac{A_0 E}{2}\right) \times \cos{\omega_m t}
 \end{equation}which represent the modulation function directly.
 
-This sustem can be improved even further because bandwidth is wasted. Bandwith is important because it is a scarce resources.
+This system can be improved even further because bandwidth is wasted. Bandwith is important because it is a scarce resources.
 
 If we consider the expanded form of that for DSB:-
 \begin{equation}
@@ -218,13 +244,12 @@ E_0 = E_1+E_2
 
 \begin{eqnarray}
 E_1 &=& \left[ A_0 \cos{\omega_0 t}\right] \times \left[ \cos{\omega_m t + \frac{\pi}{2}}\right]\nonumber \\
-&=& A_0 \cos{\omega_0t}\times \sin{\omega_m t}
+&=& A_0 \cos{\omega_0t}\times \sin{\omega_m t} 
 \end{eqnarray}
-
 $\therefore$
-\begin{equation}
-E_2 = A_0 \sin{\omega_0t}\times \cos{\omega_m t}
-\end{equation}
+\begin{eqnarray}
+E_2 &=& A_0 \sin{\omega_0t}\times \cos{\omega_m t}
+\end{eqnarray}
 
 $\therefore$
 \begin{eqnarray}
@@ -238,10 +263,10 @@ Similarly, the LSB can be generated by changing the sign of the second term abov
 The method works very well only when a single frequency of modulation is used. In practise, a range of frequences is used and it is very difficult to obtain a 90\textdegree phase shift over a range of frequencies.
 
 \subsection{Vestigial Sideband}
-Rememober the abbrs, "in case they get slipped into a question"
+Remember all the abbreviations, "in case they get slipped into a question"
 This is an approximation to SSB which has been used extensively in analoge T.V. ver many decades. Basically, a DSB/C (Double Sideban with Carrier)
 
-% Vestigial sideband sign...
+% Vestigial sideband plot...
 
 The main benefits are: simplicty and cheapness compared to SSB, when using valve/vacuum tube technologies.
 
