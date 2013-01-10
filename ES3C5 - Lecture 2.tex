@@ -1,0 +1,257 @@
+\documentclass[11pt]{article} % use larger type; default would be 10pt
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{geometry} % to change the page dimensions
+\geometry{a4paper} % or letterpaper (US) or a5paper or....
+\geometry{margin=1in}
+\usepackage{circuitikz}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+
+\usepackage{amsthm}
+
+\theoremstyle{definition}
+\newtheorem{example}{Example}
+
+\usepackage{fancyhdr} % This should be set AFTER setting up the page geometry
+\pagestyle{fancy} % options: empty , plain , fancy
+\renewcommand{\headrulewidth}{0pt} % customise the layout...
+\lhead{ES3C5}\chead{Lecture 2}\rhead{09/01/2013}
+\lfoot{}\cfoot{\thepage}\rfoot{Olly Levett}
+
+\begin{document}
+
+\section{Laplace transfer function (TF)}
+\begin{itemize}
+\item For a linear and stationary system
+\begin{equation}
+TF = \frac{\mathcal{L}\{output\}}{\mathcal{L}\{input\}}
+\end{equation}
+ie $\mathcal{L}\{output\} = TF x \mathcal{L}\{input\}$
+
+with all intitial conditions assymed zero.
+\item TF describes the dynamics of the system
+
+\end{itemize}
+A linear system obeys the principle of superposition, i.e. if $x_1 \rightarrow y_1$ and $x_2\rightarrow y_2$ then $x_1+x_2 \rightarrow y_1 + y_2$ where $x_n$ and $y_n$ are respectively the input and output of the sytem.
+
+\subsection{Resistors}
+\begin{figure}[h]
+
+\begin{circuitikz}
+	\draw
+	(0,2) 
+	to[short,o-*] (2,2) 
+	node[anchor=west,above right]{$i(t)$}
+	to[R, l=$R$,*-*] (2,0)
+	to[short,*-o] (0,0);
+	\draw[->] (0,0.3) --(0,1) node[left]{$v(t)$} --  (0,1.7);
+\end{circuitikz}
+\centering
+\caption{Simple resistor network}
+\end{figure}
+
+\begin{equation}
+v(t) = Ri(t)
+\end{equation}
+
+taking LT and assume zero initial conditions 
+\begin{equation}
+V(s) =RI(s)
+\end{equation}
+\subsection{Capacitors}
+
+\begin{figure}[h]
+\begin{circuitikz}
+	\draw
+	(0,2)
+	to[short,o-*] (2,2) 
+	node[anchor=west,above right]{$i(t)$}
+	to[C, l=$C$,*-*] (2,0)
+	to[short,*-o] (0,0);
+	\draw[->] (0,0.3) --(0,1) node[left]{$v(t)$} --  (0,1.7);
+
+\end{circuitikz}
+\centering
+\caption{Simple capacitor network}
+\end{figure}
+\begin{equation}
+v(t) = \frac{1}{C}\int i(t) dt
+\end{equation}
+Taking LT and assume zero initial conditions
+\begin{equation}
+V(s) = \frac{I(s)}{sC}
+\end{equation}
+
+\subsection{Inductors}
+
+\begin{figure}[h]
+\begin{circuitikz}
+	\draw
+	(0,2)
+	to[short,o-*] (2,2) 
+	node[anchor=west,above right]{$i(t)$}
+	to[L, l=$L$,*-*] (2,0)
+	to[short,*-o] (0,0);
+	\draw[->] (0,0.3) --(0,1) node[left]{$v(t)$} --  (0,1.7);
+\end{circuitikz}
+\centering
+\caption{Simple inductor network}
+\end{figure}
+\begin{equation}
+v(t) = L\frac{di(t)}{dt}
+\end{equation}
+Take LT and assume zero initial conditions
+\begin{equation}
+V(s) = sLI(s)
+\end{equation}
+
+\subsection{Kirchoff's Laws}
+\begin{enumerate}
+\item The total current flowing towards a node is equal to the total current flowing from that node
+\item In a closed circuit, the algebraic sum of the products of the current and the resistance of each part of the circuit is equal to the resultant e.m.f. in the circuit. 
+
+Alternatively, in a given loop, the sum of voltage rises is equal to the sum of voltage drops.
+
+\end{enumerate}
+The TF of a system can be found by finding the LT of each componenent and applying Kirchoff's laws.
+
+\begin{example}
+	See Fig. \ref{ex:int}
+	\begin{figure}[h]
+		\begin{circuitikz}
+			\draw 	(0,2)
+			to[R,l=$R$,o-*] (3,2) 
+			to[C, l=$C$,*-*] (3,0)
+			to[short,*-o] (0,0);
+
+			\draw (3,2) to[short,*-o ](5,2);
+			\draw (3,0) to[short,*-o] (5,0);
+
+			\draw[->] (0,0.3) --(0,1) node[left]{$v_i(t)$} --  (0,1.7);
+			\draw[->] (5,0.3) --(5,1) node[right]{$v_o(t)$} --  (5,1.7);
+		\end{circuitikz}
+		\centering
+		\caption{An integrating circuit}
+		\label{ex:int}
+	\end{figure}
+
+	\begin{equation}
+		V_0(s)=\frac{I(s)}{sC}
+	\end{equation}
+From 2nd law,
+	\begin{equation}
+		V_i(s)=RI(s)+\frac{I(s)}{sC}
+	\end{equation}
+TF
+	\begin{eqnarray}
+		\frac{V_o}{V_i}&=&\frac{\frac{I(s)}{sC}}{RI(s)+\frac{I(s)}{sC}} \nonumber\\
+		&=& \frac{1}{sRC+1}
+	\end{eqnarray}
+\end{example}
+\begin{example}
+	See Fig. \ref{ex:electnet}
+	\begin{figure}[h]
+		\begin{circuitikz}
+			\draw 	(0,2)
+			to[R,l=$R_1$,o-*] (3,2) 
+			to[C, l=$C$,*-*] (3,0)
+			to[short,*-o] (0,0);
+			\draw (3,2) 
+			to[L,*-*] (6,2)
+			to[R, l=$R_2$,*-*] (6,0)
+			to[short,*-*] (3,0);
+
+			\draw (6,2) to[short,*-o ](8,2);
+			\draw (6,0) to[short,*-o] (8,0);
+
+
+			\draw[<-] (2.5,0.3) --(2.5,1) node[left]{$i_1(t)$} --  (2.5,1.7);
+			\draw[<-] (5.5,0.3) --(5.5,1) node[left]{$i_2(t)$} --  (5.5,1.7);
+
+			\draw[->] (0,0.3) --(0,1) node[left]{$v_i(t)$} --  (0,1.7);
+			\draw[->] (8,0.3) --(8,1) node[right]{$v_o(t)$} --  (8,1.7);
+		\end{circuitikz}
+		\centering
+		\caption{An example electrical network}
+		\label{ex:electnet}
+	\end{figure}
+
+Applying 2nd law to 1st loop,
+\begin{equation}
+V_i(s)=R_1I_1(s)+\frac{I_1(s)}{sC}-\frac{I_2(s)}{sC}
+\end{equation}
+Applying 2nd law to 2nd loop,
+\begin{equation}
+\frac{I_2(s)}{sC} - \frac{I_1(s)}{sC} + sLI_2(s)+R_2I_2(s)=0
+\end{equation}
+\end{example} 
+Solving simultaneously,
+\begin{equation}
+V_i(s)=I_2(s)\left( s^2LCR_1+s\left[ CR_1R_2+L\right] + \left[R_1+R_2\right]\right)
+\end{equation}
+note
+\begin{equation}
+V_o(S)=R_2I_2(s)
+\end{equation}
+$\therefore$ TF is
+\begin{equation}
+\frac{V_o}{V_i} = \frac{R_2}{s^2LCR_1+s\left[ CR_1R_2+L\right] + \left[R_1+R_2\right]}
+\end{equation}
+
+\section{Test signals and dynamic response}
+\subsection{Unit step input}
+	\begin{figure}[h]
+		\begin{tikzpicture}
+			\draw (0,0) -- (1,0) node[below]{$0$} -- (1,1) node [left] {$1$} -- (2,1) -- (4,1) node[right]{$x(t)$};
+			\draw[->] (0,0) -- (4,0) node[below right]{$x$};
+		\end{tikzpicture}
+		\centering
+		\caption{Step response}
+	\end{figure}
+\begin{equation}
+X(s)=\frac{1}{s}
+\end{equation}
+\begin{example}
+Given $H(s)=\frac{1}{1+\tau s}$ (a servo)
+\begin{eqnarray}
+Y(s) &=& \frac{1}{1+\tau s} \times \frac{1}{s} \nonumber \\
+&=& \frac{\frac{1}{\tau}}{s\left( s+ \frac{1}{\tau}\right)}
+\end{eqnarray}
+
+\begin{figure}[h]
+	\centering
+	\caption{Dynamic response of a servo when subject to a unit step}
+\end{figure}
+
+\end{example}
+
+
+\subsection{Unit ramp input}
+\begin{figure}[h]
+	\centering
+	\caption{Dynamic response of a servo when subject to a unit step}
+\end{figure}
+Where $\tan (\theta) = 1$ ie
+\begin{eqnarray}
+x(t) &=& t \nonumber \\
+X(s) = \frac{1}{s^2}
+\end{eqnarray}
+
+\begin{example}
+
+Given $H(s) = \frac{1}{1+\tau s}$
+\begin{eqnarray}
+Y(s) &=& \frac{1}{1+\tau s} \times \frac{1}{s^2} \\
+&=& \frac{\tau}{s+\frac{1}{\tau} - \frac{\tau}{s} + \frac{1}{s^2}}
+\end{eqnarray}
+
+Thus,
+\begin{eqnarray}
+y(t) &=& \tau e^{-\frac{t}{\tau}} - \tau + t \\
+= t-\tau\left(1-e^{-\frac{t}{\tau}}\right)
+\end{eqnarray}
+\end{example}
+\end{document}
