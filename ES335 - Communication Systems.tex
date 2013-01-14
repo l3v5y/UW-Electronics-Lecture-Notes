@@ -22,6 +22,7 @@
 \label{sec:lec1}
 \begin{equation}
 	f(t) = \underbrace{A_c}_{\mbox{\scriptsize Amplitude}} \times \cos(\overbrace{\omega}^{\mbox{\scriptsize Angular frequency}} t + \underbrace{\phi _c}_{\mbox{\scriptsize Phase term}})
+\label{eq:radio}
 \end{equation}
 
 Modulation is the process of applying information to a carrier, in this case, the carrier frequency is $\omega _c$ (as an angular frequency) or $f_c$ as a frequency directly where $\omega_c = 2 \pi f_c$.
@@ -271,4 +272,109 @@ This is an approximation to SSB which has been used extensively in analoge T.V. 
 The main benefits are: simplicty and cheapness compared to SSB, when using valve/vacuum tube technologies.
 
 The disadvantage is carrier still there, wasting power, but alowing an envelope detector (cheap, easy to make) to be used.
+
+\section{Lecture 3 - Angle Modulation}
+Starting with \ref{eq:rf}
+\begin{equation}
+f(t) = A_0 \cdot \cos\left(\omega_0t+\phi\right)
+\end{equation}
+
+In the expression for $f(t)$ if we make $(\omega_ct+\phi)=\phi(t)$ then $\phi_c$ may be made instantaneously proportional to the modulating signa $f_m(t)$:-
+\begin{eqnarray}
+\phi\left(t\right) &=&  \omega_ct+k_p f_m(t) \nonumber \\
+\implies f(t) &=& A_0 \cos\theta(t)
+\end{eqnarray}
+where $k_p = \mbox{constant of modulation}$. This is Phase Modulation.
+
+Alternatively, we can have 
+\begin{eqnarray}
+	\omega(t) &=& \left[\frac{d\phi(t)}{dt}\right] \nonumber \\
+	&=& \omega_c + k_f \cdot f_m(t)
+\end{eqnarray}
+where, as before $k_f$ is a constant.
+
+In this case, the instantaneous frequency has the value $\omega_c$ in the absence of a modulating signal. By integrating the above expression $\frac{d\theta(t)}{dt}$:-
+
+\begin{eqnarray}
+\omega(t) &=& \frac{d\theta(t)}{dt} \implies \int{\omega(\theta)}dt = \theta(t) \nonumber \\
+\implies \theta(t) &=& \omega_ct + k_f \int{f_m(t)} dt + \phi_0
+\end{eqnarray}
+This is frequency modulation.
+
+Frequency modulation is thus an indirect form of pulse modulation and is mathematically related.
+
+% Diagram
+
+Phase and frequency modulation are thus similar in form and are both angle modulation.
+
+Frequency modulation can be generated easily using a voltage controlled oscillator.
+
+% VCO diagraom
+
+\subsection{Detection of FM}
+An FM discriminator (or Phase Locked Loop) is used to convert frequenct changes to amlitude changes:-
+% Frequency graph
+\begin{figure}
+	\begin{tikzpicture}[yscale=0.5,xscale=1]
+		\draw[->]  (-4,0) -- (4,0) node[below]{Frequency};
+		\draw[->]  (0,-4) -- (0,4) node[left]{Amplitude};
+		\draw[blue] (-3,-2) -- (-2,-3) -- (2,3) -- (3,2);
+		\draw[dotted](-2,0) node[above]{$(f_0-f_{max})$} -- (-2,-3);
+		\draw[dotted](2,0) node[below]{$(f_0+f_{max})$} -- (2,3);
+	\end{tikzpicture}
+\centering
+\caption{}
+\end{figure}
+At frequency $f_0$ the output of the FM demodulator is zero. For frequencies above $f_0$ (but less than $\pm f_{max}$ then the output is greater than zero (or inverted and greater than 0 for $f < f_0$. The output of such a discriminator is then fed to a circuit or system which detects amplitude changes.
+
+F.M. and P.M. generate a different spectrum to let $f_m(t) = \cos{\left(\omega_mt\right)}$ for F.M.
+\begin{eqnarray}
+\therefore f(t) &=& A_0 \cdot \cos{\left[\omega_0t + k_f\int^t_0\cos{\left(\omega_mt\right)}dt\right]} \nonumber \\
+&=& A_0\cdot\cos{\left[\omega_0t+\left( \frac{k_f}{\omega_m}\right)\sin{\omega_mt }\right]}
+\end{eqnarray}
+
+The instantaneous frequency of this value is $f_i = \frac{(\omega_0 +k_f\cos{\omega_mt})}{2\pi}$ which oscillates between two extreme values:-
+\begin{equation}
+\left[ \frac{\omega_0}{2\pi} \right] \pm \left[ \frac{k_f}{2\pi} \right] \mbox{for } cos(\omega_mt)_max=\pm 1
+\end{equation}
+
+The peak value of the difference between $f_i$ and the carrier frequency $f_0 = \left( \frac{\omega_0}{2\pi}\right)$ is the frequency deviation, which is $\left[ \frac{k_f}{2\pi}\right]$ in the above example.
+
+% Real might be the wrong word here...
+Since $k_f$ is proportional to the real amplitide of the modulating signal, so is the frequency deviation.
+
+If $f_d$ is the maximum frequency deviation and $f_a$ is the actual frequency deviation then the deviation ratio, $m$ is defined as:-
+\begin{equation}
+m=\frac{f_a}{f_d}
+\end{equation}
+Now $f_a = \frac{k_f}{2\pi}$ so $m=\left[\frac{k_f}{2\pi\cdot f_d}\right]$
+$\therefore$ 
+\begin{equation}
+\left(\frac{k_f}{\omega_m}\right) = \frac{2\pi f_a}{2\pi f_m} = \frac{f_a}{f_m} = m\frac{f_d}{f_m}
+\end{equation}
+
+(Comparing actual frequency deviations to the mdoulating frequency $f_m$).
+\begin{eqnarray}
+\implies \frac{mf_d}{f_m} &=& m_p = \mbox{modulation index} \nonumber \\
+\therefore f(t) &=& A_0 \cdot\left[\omega_0t+m\cdot\sin{\omega_mt}\right]
+\end{eqnarray}
+
+Usign Bessel functions, 
+\begin{equation}
+	f(t) = A_0 \sum_{m=\infty}^{\infty}{I_n(m_p)\cdot \cos{(\omega_c + n\omega_m)}t}
+\end{equation}
+$\therefore$ firstly, FM thus generates a range of frequencies from $-\infty$to$\infty$ in practice, the bandwidth is restrictred and also the Bessel coefficient ($=I$) have finite values which tend to zero as n tends to $\pm \infty$
+
+\begin{table}[h]
+    \begin{tabular}{|c|c|c|c|}
+        \hline
+ & & \multicolumn{2}{c}{Bandwidth} \\
+Modulation Index $m_p$ & No. of sidebands $n$ &  (a) as multiples of $f_m$ & (b) as multiples of $f_a$ \\ \hline
+	0.1 &  2 & 2 & 20 \\
+	0.5 & 4 & 4 & 8 \\
+	1 & 6 & 6 & 6 \\
+	5 & 16 & 16 & 3.2 \\
+	30 & 70 & 70 &2.3 \\
+    \end{tabular}
+\end{table}
 \end{document}
