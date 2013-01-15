@@ -45,12 +45,12 @@
 
 \subsection{Laplace transforms (LT)}
 	\begin{itemize}
-	\item For modelling a linear sstem sing a transfer function
+	\item For modeling a linear system sing a transfer function
 	\item LT of function $f(t)$ in time domain is
 		\begin{equation}
 			F(s) = \int^\infty _0 f(t)e^{-st}dt =\mathcal{L}\{f(t)\}
 		\end{equation}
-		with laplace variable $s = \sigma j\omega$ with dimension $time^{-1}$
+		with Laplace variable $s = \sigma j\omega$ with dimension $time^{-1}$
 	\end{itemize}
 
 \begin{example}
@@ -146,11 +146,11 @@
 			TF = \frac{\mathcal{L}\{output\}}{\mathcal{L}\{input\}}
 			\end{equation}
 			ie $\mathcal{L}\{output\} = TF x \mathcal{L}\{input\}$
-			with all intitial conditions assymed zero.
+			with all initial conditions assumed zero.
 		\item TF describes the dynamics of the system
 
 	\end{itemize}
-	A linear system obeys the principle of superposition, i.e. if $x_1 \rightarrow y_1$ and $x_2\rightarrow y_2$ then $x_1+x_2 \rightarrow y_1 + y_2$ where $x_n$ and $y_n$ are respectively the input and output of the sytem.
+	A linear system obeys the principle of superposition, i.e. if $x_1 \rightarrow y_1$ and $x_2\rightarrow y_2$ then $x_1+x_2 \rightarrow y_1 + y_2$ where $x_n$ and $y_n$ are respectively the input and output of the system.
 
 \subsection{Resistors}
 	\begin{figure}[h]	
@@ -226,7 +226,7 @@
 		Alternatively, in a given loop, the sum of voltage rises is equal to the sum of voltage drops.
 	\end{enumerate}
 
-	The TF of a system can be found by finding the LT of each componenent and applying Kirchoff's laws.
+	The TF of a system can be found by finding the LT of each component and applying Kirchoff's laws.
 
 	\begin{example}
 		See Fig. \ref{ex:int}
@@ -330,7 +330,6 @@
 			Y(s) &=& \frac{1}{1+\tau s} \times \frac{1}{s} \nonumber \\
 			&=& \frac{\frac{1}{\tau}}{s\left( s+ \frac{1}{\tau}\right)}
 		\end{eqnarray}
-
 		\begin{figure}[h]
 			\centering
 			\caption{Dynamic response of a servo when subject to a unit step}
@@ -373,7 +372,7 @@
 
 	\begin{itemize}
 		\item where $b_0, b_1 \cdots b_m$ and $a_0, a_1 \cdots a_n$ are real
-		\item $m<n$ for a practical systen
+		\item $m<n$ for a practical system
 		\item $z_1$ to $z_m$ are roots of numerator (zeros)
 		\item $p_1$ to $p_n$ are roots of denominator (poles)
 		\item $k$ is a gain factor
@@ -396,7 +395,7 @@
 			\draw[-] (-0.4, - 0.4) -- (0.4,0.4) node[above right]{pole};
 			\draw (2,0) node[above] {s-plane};
 		\end{tikzpicture}
-		\caption{Pole zero plot of a transfer function, witk $k=1$}
+		\caption{Pole zero plot of a transfer function, with $k=1$}
 	\end{figure}
 
 \subsection{Poles and Responses}
@@ -508,7 +507,7 @@
 		\caption{Time waveforms corresponding to a complex pole with a real part}
 	\end{figure}
 
-	From equation \ref{eq:invltcomplex}, a pair of complex poles at $s=-\alpha \pm j\beta$ (or $s=\alpha \pm j\beta$) gives rise to $e^{-\alpha t}\sin{(\beta t+\phi)}$ (or $e^{\alpha t}\sin{(\beta t+\phi)}$) that is sinusoidal and decas (or grows) exponentially. The larger the value of $\alpha$ the faster the rate of decay (or growth). $\beta$ determines the frequency of the oscilation.
+	From equation \ref{eq:invltcomplex}, a pair of complex poles at $s=-\alpha \pm j\beta$ (or $s=\alpha \pm j\beta$) gives rise to $e^{-\alpha t}\sin{(\beta t+\phi)}$ (or $e^{\alpha t}\sin{(\beta t+\phi)}$) that is sinusoidal and decays (or grows) exponentially. The larger the value of $\alpha$ the faster the rate of decay (or growth). $\beta$ determines the frequency of the oscillation.
 
 	\begin{figure}[H]
 		\centering
@@ -519,7 +518,7 @@
 			\draw[-] (-0.1,1) node[left]{$1$} -- (0.1,1);
 			\draw[-] (0,0) node[below left]{$0$};
 		\end{tikzpicture}
-		\caption{Time waveform correspending to a complex pole on the imaginary axis of the Laplace s-plane}
+		\caption{Time waveform corresponding to a complex pole on the imaginary axis of the Laplace s-plane}
 	\end{figure}
 	From equation \ref{eq:invltcomplex}, if a pair of complex poles are on the imaginary axis (i.e. $\alpha=0$) then response is sinusoidal where $\beta$ determines the frequency of oscillation.
 \end{document}
