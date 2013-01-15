@@ -5,8 +5,12 @@
 \geometry{a4paper} % or letterpaper (US) or a5paper or....
 \geometry{margin=1in}
 \usepackage{circuitikz}
+\usepackage{float} % For the H position specifier
 
-\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption} % For subfigures
+\usepackage{amsmath} % pretty maths
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{fancyhdr} % This should be set AFTER setting up the page geometry
@@ -84,7 +88,7 @@
 			\draw[->] (0,0) -> (4,0) node [below right] {$x$};
 		\end{tikzpicture}
 		\centering
-		\caption{}
+		\caption{Step response to something I think}
 	\end{figure}
 \end{example}
 
@@ -92,40 +96,38 @@
 	\begin{description}
 		\item[Property 1] if $x(t)\leftrightarrow X(s)$ and $y(t)\leftrightarrow Y(s)$ then $x(t)+-y(t) \leftrightarrow X(s)+- Y(s)$
 		\item[Property 2] if $x(t)\leftrightarrow X(s)$  and $K$ is constant, then $Kx(t)\leftrightarrow KX(s)$
-
-\begin{example}
-		Determine LT of $v(t) = 3cos4t$
-		From table 1.1 7th row
-			\begin{equation}
-				\mathcal{L}\{cos\omega t\} = \frac{s}{s^2+\omega^2}
-			\end{equation}
-		i.e., $\omega=4$, and using property 2 gives
-			\begin{equation}
-				 V(s) =  \frac{3s}{s^2+16}
-			\end{equation}
+			\begin{example}
+				Determine LT of $v(t) = 3cos4t$
+				From table 1.1 7th row
+					\begin{equation}
+						\mathcal{L}\{cos\omega t\} = \frac{s}{s^2+\omega^2}
+					\end{equation}
+				i.e., $\omega=4$, and using property 2 gives
+					\begin{equation}
+						 V(s) =  \frac{3s}{s^2+16}
+					\end{equation}
+			\end{example}
 		\item[Property 3] Derivatives
 			\begin{equation}
 				\mathcal{L}\left\{\frac{d^nf(t)}{dt^n}\right\} = s^n  F(s) -s^{n-1}f(0)-s^{n-2}f^1(0)  ...  f^{n-1}(0)
 			\end{equation}
 			where $f^n(t)$ denotes the n\textsuperscript{th} derivative of f(t)
-		Assume quiescent state, i.e. all system variables and their derivatives are 0 at $t=0$,
+			Assume quiescent state, i.e. all system variables and their derivatives are 0 at $t=0$,
 			\begin{equation}
 				\mathcal{L}\left\{\frac{d^nf(t)}{dt^n}\right\}  = s^nF(s)
 			\end{equation}
-		valid assumption in all practical systems (no power$\rightarrow$off)
-\end{example}
-\begin{example}	
-			Given $$\tau \frac{dy(t)}{dt}+y(t) = kx(t)$$  where $x(t)$ and $y(t)$ are input and output of a system respectively.
-			\begin{equation}
-				\tau s Y(s) + Y(s) = kX(s) \\
-				Y(s) = X(s)\left[\frac{k1}{1+s^\tau }\right]
+			valid assumption in all practical systems (no power$\rightarrow$off)
+			\begin{example}	
+				Given $$\tau \frac{dy(t)}{dt}+y(t) = kx(t)$$  where $x(t)$ and $y(t)$ are input and output of a system respectively.
+				\begin{equation}
+					\tau s Y(s) + Y(s) = kX(s) \\
+					Y(s) = X(s)\left[\frac{k1}{1+s^\tau }\right]
 			\end{equation}
-\end{example}
+	\end{example}
 		\item[Property 4] Integration
 			\begin{equation}
 				\int^t_0f(t)dt\leftrightarrow \frac{F(s)}{s}
 			\end{equation}
-
 		\item[Property 5] Time-shift (delay)
 			\begin{equation}
 				\mathcal{L}\left\{f(t-T)\right\}=e^{-sT}F(s)
@@ -138,185 +140,179 @@
 
 
 \section{Laplace transfer function (TF)}
-\begin{itemize}
-\item For a linear and stationary system
-\begin{equation}
-TF = \frac{\mathcal{L}\{output\}}{\mathcal{L}\{input\}}
-\end{equation}
-ie $\mathcal{L}\{output\} = TF x \mathcal{L}\{input\}$
+	\begin{itemize}
+		\item For a linear and stationary system
+			\begin{equation}
+			TF = \frac{\mathcal{L}\{output\}}{\mathcal{L}\{input\}}
+			\end{equation}
+			ie $\mathcal{L}\{output\} = TF x \mathcal{L}\{input\}$
+			with all intitial conditions assymed zero.
+		\item TF describes the dynamics of the system
 
-with all intitial conditions assymed zero.
-\item TF describes the dynamics of the system
-
-\end{itemize}
-A linear system obeys the principle of superposition, i.e. if $x_1 \rightarrow y_1$ and $x_2\rightarrow y_2$ then $x_1+x_2 \rightarrow y_1 + y_2$ where $x_n$ and $y_n$ are respectively the input and output of the sytem.
+	\end{itemize}
+	A linear system obeys the principle of superposition, i.e. if $x_1 \rightarrow y_1$ and $x_2\rightarrow y_2$ then $x_1+x_2 \rightarrow y_1 + y_2$ where $x_n$ and $y_n$ are respectively the input and output of the sytem.
 
 \subsection{Resistors}
-\begin{figure}[h]
+	\begin{figure}[h]	
+		\centering
+		\begin{circuitikz}
+			\draw
+			(0,2) 
+			to[short,o-*] (2,2) 
+			node[anchor=west,above right]{$i(t)$}
+			to[R, l=$R$,*-*] (2,0)
+			to[short,*-o] (0,0);
+			\draw[->] (0,0.3) --(0,1) node[left]{$v(t)$} --  (0,1.7);
+		\end{circuitikz}
+		\caption{Simple resistor network}
+	\end{figure}
 
-\begin{circuitikz}
-	\draw
-	(0,2) 
-	to[short,o-*] (2,2) 
-	node[anchor=west,above right]{$i(t)$}
-	to[R, l=$R$,*-*] (2,0)
-	to[short,*-o] (0,0);
-	\draw[->] (0,0.3) --(0,1) node[left]{$v(t)$} --  (0,1.7);
-\end{circuitikz}
-\centering
-\caption{Simple resistor network}
-\end{figure}
+	\begin{equation}
+		v(t) = Ri(t)
+	\end{equation}
+	Taking LT and assume zero initial conditions 
+	\begin{equation}
+		V(s) =RI(s)
+	\end{equation}
 
-\begin{equation}
-v(t) = Ri(t)
-\end{equation}
-
-taking LT and assume zero initial conditions 
-\begin{equation}
-V(s) =RI(s)
-\end{equation}
 \subsection{Capacitors}
-
-\begin{figure}[h]
-\begin{circuitikz}
-	\draw
-	(0,2)
-	to[short,o-*] (2,2) 
-	node[anchor=west,above right]{$i(t)$}
-	to[C, l=$C$,*-*] (2,0)
-	to[short,*-o] (0,0);
-	\draw[->] (0,0.3) --(0,1) node[left]{$v(t)$} --  (0,1.7);
-
-\end{circuitikz}
-\centering
-\caption{Simple capacitor network}
-\end{figure}
-\begin{equation}
-v(t) = \frac{1}{C}\int i(t) dt
-\end{equation}
-Taking LT and assume zero initial conditions
-\begin{equation}
-V(s) = \frac{I(s)}{sC}
-\end{equation}
+	\begin{figure}[h]
+		\centering
+		\begin{circuitikz}
+			\draw (0,2)
+			to[short,o-*] (2,2) 
+			node[anchor=west,above right]{$i(t)$}
+			to[C, l=$C$,*-*] (2,0)
+			to[short,*-o] (0,0);
+			\draw[->] (0,0.3) --(0,1) node[left]{$v(t)$} --  (0,1.7);
+		\end{circuitikz}
+	\caption{Simple capacitor network}
+	\end{figure}
+	\begin{equation}
+		v(t) = \frac{1}{C}\int i(t) dt
+	\end{equation}
+	Taking LT and assume zero initial conditions
+	\begin{equation}
+		V(s) = \frac{I(s)}{sC}
+	\end{equation}
 
 \subsection{Inductors}
-
-\begin{figure}[h]
-\begin{circuitikz}
-	\draw
-	(0,2)
-	to[short,o-*] (2,2) 
-	node[anchor=west,above right]{$i(t)$}
-	to[L, l=$L$,*-*] (2,0)
-	to[short,*-o] (0,0);
-	\draw[->] (0,0.3) --(0,1) node[left]{$v(t)$} --  (0,1.7);
-\end{circuitikz}
-\centering
-\caption{Simple inductor network}
-\end{figure}
-\begin{equation}
-v(t) = L\frac{di(t)}{dt}
-\end{equation}
-Take LT and assume zero initial conditions
-\begin{equation}
-V(s) = sLI(s)
-\end{equation}
+	\begin{figure}[h]	
+		\centering
+		\begin{circuitikz}
+			\draw
+			(0,2)
+			to[short,o-*] (2,2) 
+			node[anchor=west,above right]{$i(t)$}
+			to[L, l=$L$,*-*] (2,0)
+			to[short,*-o] (0,0);
+			\draw[->] (0,0.3) --(0,1) node[left]{$v(t)$} --  (0,1.7);
+		\end{circuitikz}
+		\caption{Simple inductor network}
+	\end{figure}
+	\begin{equation}
+		v(t) = L\frac{di(t)}{dt}
+	\end{equation}
+	Take LT and assume zero initial conditions
+	\begin{equation}
+		V(s) = sLI(s)
+	\end{equation}
 
 \subsection{Kirchoff's Laws}
-\begin{enumerate}
-\item The total current flowing towards a node is equal to the total current flowing from that node
-\item In a closed circuit, the algebraic sum of the products of the current and the resistance of each part of the circuit is equal to the resultant e.m.f. in the circuit. 
+	\begin{enumerate}
+		\item The total current flowing towards a node is equal to the total current flowing from that node
+		\item In a closed circuit, the algebraic sum of the products of the current and the resistance of each part of the circuit is equal to the resultant e.m.f. in the circuit. 
 
-Alternatively, in a given loop, the sum of voltage rises is equal to the sum of voltage drops.
+		Alternatively, in a given loop, the sum of voltage rises is equal to the sum of voltage drops.
+	\end{enumerate}
 
-\end{enumerate}
-The TF of a system can be found by finding the LT of each componenent and applying Kirchoff's laws.
+	The TF of a system can be found by finding the LT of each componenent and applying Kirchoff's laws.
 
-\begin{example}
-	See Fig. \ref{ex:int}
-	\begin{figure}[h]
-		\begin{circuitikz}
-			\draw 	(0,2)
-			to[R,l=$R$,o-*] (3,2) 
-			to[C, l=$C$,*-*] (3,0)
-			to[short,*-o] (0,0);
+	\begin{example}
+		See Fig. \ref{ex:int}
+		\begin{figure}[h]
+			\begin{circuitikz}
+				\draw 	(0,2)
+				to[R,l=$R$,o-*] (3,2) 
+				to[C, l=$C$,*-*] (3,0)
+				to[short,*-o] (0,0);
 
-			\draw (3,2) to[short,*-o ](5,2);
-			\draw (3,0) to[short,*-o] (5,0);
+				\draw (3,2) to[short,*-o ](5,2);
+				\draw (3,0) to[short,*-o] (5,0);
 
-			\draw[->] (0,0.3) --(0,1) node[left]{$v_i(t)$} --  (0,1.7);
-			\draw[->] (5,0.3) --(5,1) node[right]{$v_o(t)$} --  (5,1.7);
-		\end{circuitikz}
-		\centering
-		\caption{An integrating circuit}
-		\label{ex:int}
-	\end{figure}
+				\draw[->] (0,0.3) --(0,1) node[left]{$v_i(t)$} --  (0,1.7);
+				\draw[->] (5,0.3) --(5,1) node[right]{$v_o(t)$} --  (5,1.7);
+			\end{circuitikz}
+			\centering
+			\caption{An integrating circuit}
+			\label{ex:int}
+		\end{figure}
 
-	\begin{equation}
-		V_0(s)=\frac{I(s)}{sC}
-	\end{equation}
-From 2nd law,
-	\begin{equation}
-		V_i(s)=RI(s)+\frac{I(s)}{sC}
-	\end{equation}
-TF
-	\begin{eqnarray}
-		\frac{V_o}{V_i}&=&\frac{\frac{I(s)}{sC}}{RI(s)+\frac{I(s)}{sC}} \nonumber\\
-		&=& \frac{1}{sRC+1}
-	\end{eqnarray}
-\end{example}
-\begin{example}
-	See Fig. \ref{ex:electnet}
-	\begin{figure}[h]
-		\begin{circuitikz}
-			\draw 	(0,2)
-			to[R,l=$R_1$,o-*] (3,2) 
-			to[C, l=$C$,*-*] (3,0)
-			to[short,*-o] (0,0);
-			\draw (3,2) 
-			to[L,*-*] (6,2)
-			to[R, l=$R_2$,*-*] (6,0)
-			to[short,*-*] (3,0);
+		\begin{equation}
+			V_0(s)=\frac{I(s)}{sC}
+		\end{equation}
+		From 2nd law,
+		\begin{equation}
+			V_i(s)=RI(s)+\frac{I(s)}{sC}
+		\end{equation}
+		TF
+		\begin{eqnarray}
+			\frac{V_o}{V_i}&=&\frac{\frac{I(s)}{sC}}{RI(s)+\frac{I(s)}{sC}} \nonumber\\
+			&=& \frac{1}{sRC+1}
+		\end{eqnarray}
+	\end{example}
+	\begin{example}
+		See Fig. \ref{ex:electnet}
+		\begin{figure}[h]
+			\begin{circuitikz}
+				\draw 	(0,2)
+				to[R,l=$R_1$,o-*] (3,2) 
+				to[C, l=$C$,*-*] (3,0)
+				to[short,*-o] (0,0);
+				\draw (3,2) 
+				to[L,*-*] (6,2)
+				to[R, l=$R_2$,*-*] (6,0)
+				to[short,*-*] (3,0);
 
-			\draw (6,2) to[short,*-o ](8,2);
-			\draw (6,0) to[short,*-o] (8,0);
+				\draw (6,2) to[short,*-o ](8,2);
+				\draw (6,0) to[short,*-o] (8,0);
 
 
-			\draw[<-] (2.5,0.3) --(2.5,1) node[left]{$i_1(t)$} --  (2.5,1.7);
-			\draw[<-] (5.5,0.3) --(5.5,1) node[left]{$i_2(t)$} --  (5.5,1.7);
+				\draw[<-] (2.5,0.3) --(2.5,1) node[left]{$i_1(t)$} --  (2.5,1.7);
+				\draw[<-] (5.5,0.3) --(5.5,1) node[left]{$i_2(t)$} --  (5.5,1.7);
 
-			\draw[->] (0,0.3) --(0,1) node[left]{$v_i(t)$} --  (0,1.7);
-			\draw[->] (8,0.3) --(8,1) node[right]{$v_o(t)$} --  (8,1.7);
-		\end{circuitikz}
-		\centering
-		\caption{An example electrical network}
-		\label{ex:electnet}
-	\end{figure}
+				\draw[->] (0,0.3) --(0,1) node[left]{$v_i(t)$} --  (0,1.7);
+				\draw[->] (8,0.3) --(8,1) node[right]{$v_o(t)$} --  (8,1.7);
+			\end{circuitikz}
+			\centering
+			\caption{An example electrical network}
+			\label{ex:electnet}
+		\end{figure}
 
-Applying 2nd law to 1st loop,
-\begin{equation}
-V_i(s)=R_1I_1(s)+\frac{I_1(s)}{sC}-\frac{I_2(s)}{sC}
-\end{equation}
-Applying 2nd law to 2nd loop,
-\begin{equation}
-\frac{I_2(s)}{sC} - \frac{I_1(s)}{sC} + sLI_2(s)+R_2I_2(s)=0
-\end{equation}
-\end{example} 
-Solving simultaneously,
-\begin{equation}
-V_i(s)=I_2(s)\left( s^2LCR_1+s\left[ CR_1R_2+L\right] + \left[R_1+R_2\right]\right)
-\end{equation}
-note
-\begin{equation}
-V_o(S)=R_2I_2(s)
-\end{equation}
-$\therefore$ TF is
-\begin{equation}
-\frac{V_o}{V_i} = \frac{R_2}{s^2LCR_1+s\left[ CR_1R_2+L\right] + \left[R_1+R_2\right]}
-\end{equation}
+		Applying 2nd law to 1st loop,
+		\begin{equation}
+			V_i(s)=R_1I_1(s)+\frac{I_1(s)}{sC}-\frac{I_2(s)}{sC}
+		\end{equation}
+		Applying 2nd law to 2nd loop,
+		\begin{equation}
+			\frac{I_2(s)}{sC} - \frac{I_1(s)}{sC} + sLI_2(s)+R_2I_2(s)=0
+		\end{equation}
+		Solving simultaneously,
+		\begin{equation}
+			V_i(s)=I_2(s)\left( s^2LCR_1+s\left[ CR_1R_2+L\right] + \left[R_1+R_2\right]\right)
+		\end{equation}
+		note
+		\begin{equation}
+			V_o(S)=R_2I_2(s)
+		\end{equation}
+		$\therefore$ TF is
+		\begin{equation}
+			\frac{V_o}{V_i} = \frac{R_2}{s^2LCR_1+s\left[ CR_1R_2+L\right] + \left[R_1+R_2\right]}
+		\end{equation}
+	\end{example}
 
-\section{Test signals and dynamic response}
-\subsection{Unit step input}
+\subsection{Test signals and dynamic response}
+\subsubsection{Unit step input}
 	\begin{figure}[h]
 		\begin{tikzpicture}
 			\draw (0,0) -- (1,0) node[below]{$0$} -- (1,1) node [left] {$1$} -- (2,1) -- (4,1) node[right]{$x(t)$};
@@ -325,81 +321,205 @@ $\therefore$ TF is
 		\centering
 		\caption{Step response}
 	\end{figure}
-\begin{equation}
-X(s)=\frac{1}{s}
-\end{equation}
-\begin{example}
-Given $H(s)=\frac{1}{1+\tau s}$ (a servo)
-\begin{eqnarray}
-Y(s) &=& \frac{1}{1+\tau s} \times \frac{1}{s} \nonumber \\
-&=& \frac{\frac{1}{\tau}}{s\left( s+ \frac{1}{\tau}\right)}
-\end{eqnarray}
+	\begin{equation}
+		X(s)=\frac{1}{s}
+	\end{equation}
+	\begin{example}
+		Given $H(s)=\frac{1}{1+\tau s}$ (a servo)
+		\begin{eqnarray}
+			Y(s) &=& \frac{1}{1+\tau s} \times \frac{1}{s} \nonumber \\
+			&=& \frac{\frac{1}{\tau}}{s\left( s+ \frac{1}{\tau}\right)}
+		\end{eqnarray}
 
-\begin{figure}[h]
-	\centering
-	\caption{Dynamic response of a servo when subject to a unit step}
-\end{figure}
+		\begin{figure}[h]
+			\centering
+			\caption{Dynamic response of a servo when subject to a unit step}
+		\end{figure}
+	\end{example}
 
-\end{example}
+
+\subsubsection{Unit ramp input}
+	\begin{figure}[h]
+		\centering
+		\caption{Dynamic response of a servo when subject to a unit step}
+	\end{figure}
+	Where $\tan {(\theta)} = 1$ ie
+	\begin{eqnarray}
+		x(t) &=& t \nonumber \\
+		X(s) &=& \frac{1}{s^2}
+	\end{eqnarray}
+
+	\begin{example}
+	Given $H(s) = \frac{1}{1+\tau s}$
+	\begin{eqnarray}
+		Y(s) &=& \frac{1}{1+\tau s} \times \frac{1}{s^2}  \nonumber  \\
+		&=& \frac{\tau}{s+\frac{1}{\tau} - \frac{\tau}{s} + \frac{1}{s^2}}
+	\end{eqnarray}
+	Thus,
+	\begin{eqnarray}
+		y(t) &=& \tau e^{-\frac{t}{\tau}} - \tau + t \nonumber \\
+		&=& t-\tau\left(1-e^{-\frac{t}{\tau}}\right)
+	\end{eqnarray}
+	\end{example}
 
 
-\subsection{Unit ramp input}
-\begin{figure}[h]
-	\centering
-	\caption{Dynamic response of a servo when subject to a unit step}
-\end{figure}
-Where $\tan {(\theta)} = 1$ ie
-\begin{eqnarray}
-x(t) &=& t \nonumber \\
-X(s) &=& \frac{1}{s^2}
-\end{eqnarray}
-
-\begin{example}
-
-Given $H(s) = \frac{1}{1+\tau s}$
-\begin{eqnarray}
-Y(s) &=& \frac{1}{1+\tau s} \times \frac{1}{s^2}  \nonumber  \\
-&=& \frac{\tau}{s+\frac{1}{\tau} - \frac{\tau}{s} + \frac{1}{s^2}}
-\end{eqnarray}
-
-Thus,
-\begin{eqnarray}
-y(t) &=& \tau e^{-\frac{t}{\tau}} - \tau + t \nonumber \\
-&=& t-\tau\left(1-e^{-\frac{t}{\tau}}\right)
-\end{eqnarray}
-\end{example}
 \section{Laplace Poles and Zeros}
-TF
-\begin{eqnarray}
-G(s) &=& \frac{b_ms_m + b_{m-1}s^{m-1}+\cdots + b_1s+b_0}{a_ns_n + a_{n-1}s^{n-1}+\cdots + a_1s+a_0} \nonumber \\
-G(s) &=& k \frac{(s-z_1)(s-z_2)\cdots(s-z_m)}{(s-p_1)(s-p_2)\cdots(s-p_m)} \nonumber \\
-&=& k\frac{\prod\limits_{i=1}^m(s-z_i)}{\prod\limits_{i=1}^n(s-p_n)}
-\end{eqnarray}
+	TF
+	\begin{eqnarray}
+		G(s) &=& \frac{b_ms_m + b_{m-1}s^{m-1}+\cdots + b_1s+b_0}{a_ns_n + a_{n-1}s^{n-1}+\cdots + a_1s+a_0} \nonumber \\
+		G(s) &=& k \frac{(s-z_1)(s-z_2)\cdots(s-z_m)}{(s-p_1)(s-p_2)\cdots(s-p_m)} \nonumber \\
+		&=& k\frac{\prod\limits_{i=1}^m(s-z_i)}{\prod\limits_{i=1}^n(s-p_n)}
+	\end{eqnarray}
 
-\begin{itemize}
-\item where $b_0, b_1 \cdots b_m$ and $a_0, a_1 \cdots a_n$ are real
-\item $m<n$ for a practical systen
-\item $z_1$ to $z_m$ are roots of numerator (zeros)
-\item $p_1$ to $p_n$ are roots of denominator (poles)
-\item $k$ is a gain factor
-\end{itemize}
+	\begin{itemize}
+		\item where $b_0, b_1 \cdots b_m$ and $a_0, a_1 \cdots a_n$ are real
+		\item $m<n$ for a practical systen
+		\item $z_1$ to $z_m$ are roots of numerator (zeros)
+		\item $p_1$ to $p_n$ are roots of denominator (poles)
+		\item $k$ is a gain factor
+	\end{itemize}
 
-\begin{example}
-\begin{equation}
-G(s) = \frac{(s+1)}{s}
-\end{equation}
-$\implies k = 1$ pole at $s=0$, zero at $s=-1$
-\end{example}
-\begin{figure}[h]
-	\centering
-	\begin{tikzpicture}
-		\draw[->] (-4,0) -- (4,0) node[below]{$\Re(s)=\sigma$};
-		\draw[->] (0,-2) -- (0,2) node[right]{$\Im(s)=j\omega$};
-		\draw (-2,0) circle [radius=0.5] node[above right]{zero};
-		\draw[-] (1.6,0.4) -- (2.4,-0.4);
-		\draw[-] (1.6, - 0.4) -- (2.4,0.4) node[above right]{pole};
-	\end{tikzpicture}
-	\caption{Pole zero plot of a transfer function, witk $k=1$}
-\end{figure}
+	\begin{example}
+		\begin{equation}
+			G(s) = \frac{(s+1)}{s}
+		\end{equation}
+		$\implies k = 1$ pole at $s=0$, zero at $s=-1$
+	\end{example}
+	\begin{figure}[h]
+		\centering
+		\begin{tikzpicture}
+			\draw[->] (-3,0) -- (2,0) node[below]{$\Re(s)=\sigma$};
+			\draw[->] (0,-2) -- (0,2) node[right]{$\Im(s)=j\omega$};
+			\draw (-2,0) circle [radius=0.5];
+			\draw(-1.7,0.4) node[ above right]{zero};
+			\draw[-] (-0.4,0.4) -- (0.4,-0.4);
+			\draw[-] (-0.4, - 0.4) -- (0.4,0.4) node[above right]{pole};
+			\draw (2,0) node[above] {s-plane};
+		\end{tikzpicture}
+		\caption{Pole zero plot of a transfer function, witk $k=1$}
+	\end{figure}
 
+\subsection{Poles and Responses}
+	TF
+	\begin{equation}
+		G(s) = \frac{N(s)}{D(s)}
+	\end{equation}
+
+\subsubsection{Case of real poles}
+	Suppose
+	\begin{equation}
+		G(s) = \frac{k N(s)}{(s+a)(s+b)(s+c)}
+	\end{equation}
+	Where $a, b, c\cdot$ are real and $k$ is a constant.
+
+		The output when a step input (ie, $\frac{1}{s}$) is applied (i.e. the step response) is
+	\begin{eqnarray}
+		\frac{k N(s)}{s(s+a)(s+b)(s+c)} &=&  \frac{k_0}{s} + \frac{k_1}{s+a} +  \frac{k_2}{s+b} + \frac{k_3}{s+c} +\cdot \nonumber \\
+		&=& \frac{k_0}{s} + \mbox{remainder terms}
+	\end{eqnarray}
+	where $k_n$ are constants.
+
+	Note:
+	\begin{itemize}
+		\item Poles determine the form of response
+		\item Zeros determine the relative components (due to input and poles) to the overall response through $k_n$
+		\item $\frac{k_0}{s}$ is due to input and remainder term is due to poles
+	\end{itemize}
+
+	Inverse LT of remainder terms gives:
+	\begin{equation}
+		k_1e^{-at}+k_2e^{-bt}+k_3e^{-ct}+\cdot
+		\label{eq:invltreal}
+	\end{equation}
+	Where $k_1, k_2, k_3 \cdot$ are affected by $N(s)$ and exponential terms depend on inputs. This is an exponential response.
+
+\subsubsection{Case of complex poles}
+	Suppose $D(s)$ also has complex poles at $s=-\alpha\pm j\beta$. Each pair of xomplexce poles gives rise to 
+	\begin{equation}
+		\frac{As+B}{(s+\alpha)^2+\beta^2}
+	\end{equation}
+	in the step response, where $A$ and $B$ are constants.
+
+	Let  $B=A\alpha + C\beta$ and expand
+	\begin{equation}
+		=\frac{A(s+\alpha)}{(s+\alpha)^2+\beta^2}+\frac{C\beta}{(s+\alpha)^2+\beta^2}
+	\end{equation}
+	Inverse LT gives
+	\begin{equation}
+		Ae^{-\alpha t}\cos{\beta t}+Ce^{-\beta t}\sin{\beta t}= Re^{-\alpha t} \sin{(\beta t+\phi)}
+		\label{eq:invltcomplex}
+	\end{equation}
+	which gives rise to an oscillatory response.
+
+	\begin{figure}[H]
+		\centering
+		\begin{subfigure}[b]{0.3\textwidth}
+			\centering
+			\begin{tikzpicture}
+				\draw[->] (-0.5,0) -- (4,0) node[below]{$t$};
+				\draw[->] (0, -0.5)  -- (0,3) node[above]{Response};
+				\draw[domain=0:4, samples=200] plot(\x, {exp(-\x*1.1)});
+				\draw[-] (-0.1,1) node[left]{$1$} -- (0.1,1);
+				\draw[-] (0,0) node[below left]{$0$};
+			\end{tikzpicture}
+			\caption{For $s=-a$}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.3\textwidth}
+			\centering
+			\begin{tikzpicture}
+				\draw[->] (-0.5,0) -- (4,0) node[below]{$t$};
+				\draw[->] (0, -0.5) -- (0,3) node[above]{Response};
+				\draw[domain=0:2.19722, samples=200] plot(\x, {exp(\x/2)});
+				\draw[-] (-0.1,1) node[left]{$1$} -- (0.1,1);
+				\draw[-] (0,0) node[below left]{$0$};
+			\end{tikzpicture}
+			\caption{For $s=a$}
+		\end{subfigure}
+		\caption{Time waveforms corresponding to a pole at $s=\pm a$ where $a$ is positive}
+	\end{figure}
+
+	From equation \ref{eq:invltreal}, a pole at $s=-a$ (or $s=a$) gives rise to $e^{-at}$ (or $e^{at}$) in the system response which is non oscillatory and decaying (or growing). The larger the value of $a$, the faster the rate of decay (or growth).
+
+
+	\begin{figure}[H]
+		\centering
+		\begin{subfigure}[b]{0.3\textwidth}
+			\centering
+			\begin{tikzpicture}
+				\draw[->] (-0.5,0) -- (4,0) node[below]{$t$};
+				\draw[->] (0, -2)  -- (0,2) node[above]{Response};
+				\draw[domain=0:4, samples=400] plot(\x, {sin(\x*10 r) * exp(-\x*0.8)});
+				\draw[-] (-0.1,1) node[left]{$1$} -- (0.1,1);
+				\draw[-] (0,0) node[below left]{$0$};
+			\end{tikzpicture}
+			\caption{Negative real part}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.3\textwidth}
+			\centering
+			\begin{tikzpicture}
+				\draw[->] (-0.5,0) -- (4,0) node[below]{$t$};
+				\draw[->] (0, -2) -- (0,2) node[above]{Response};
+				\draw[domain=0:4, samples=400] plot(\x, {sin(\x*10 r) * exp(\x/8)});
+				\draw[-] (-0.1,1) node[left]{$1$} -- (0.1,1);
+				\draw[-] (0,0) node[below left]{$0$};
+			\end{tikzpicture}
+			\caption{Positive real part}
+		\end{subfigure}
+		\caption{Time waveforms corresponding to a complex pole with a real part}
+	\end{figure}
+
+	From equation \ref{eq:invltcomplex}, a pair of complex poles at $s=-\alpha \pm j\beta$ (or $s=\alpha \pm j\beta$) gives rise to $e^{-\alpha t}\sin{(\beta t+\phi)}$ (or $e^{\alpha t}\sin{(\beta t+\phi)}$) that is sinusoidal and decas (or grows) exponentially. The larger the value of $\alpha$ the faster the rate of decay (or growth). $\beta$ determines the frequency of the oscilation.
+
+	\begin{figure}[H]
+		\centering
+		\begin{tikzpicture}
+			\draw[->] (-0.5,0) -- (4,0) node[below]{$t$};
+			\draw[->] (0, -1.2) -- (0,2) node[above]{Response};
+			\draw[domain=0:4, samples=400] plot(\x, {sin(\x*10 r)});
+			\draw[-] (-0.1,1) node[left]{$1$} -- (0.1,1);
+			\draw[-] (0,0) node[below left]{$0$};
+		\end{tikzpicture}
+		\caption{Time waveform correspending to a complex pole on the imaginary axis of the Laplace s-plane}
+	\end{figure}
+	From equation \ref{eq:invltcomplex}, if a pair of complex poles are on the imaginary axis (i.e. $\alpha=0$) then response is sinusoidal where $\beta$ determines the frequency of oscillation.
 \end{document}
