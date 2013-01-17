@@ -363,7 +363,7 @@ Usign Bessel functions,
 \begin{equation}
 	f(t) = A_0 \sum_{m=\infty}^{\infty}{I_n(m_p)\cdot \cos{(\omega_c + n\omega_m)}t}
 \end{equation}
-$\therefore$ firstly, FM thus generates a range of frequencies from $-\infty$ to $\infty$ in practice, the bandwidth is restricted and also the Bessel coefficient ($=I$) have finite values which tend to zero as n tends to $\pm \infty$
+therefore firstly, FM thus generates a range of frequencies from $-\infty$ to $\infty$ in practice, the bandwidth is restricted and also the Bessel coefficient ($=I$) have finite values which tend to zero as n tends to $\pm \infty$
 
 \begin{table}[h]
     \begin{tabular}{cccc}
@@ -376,5 +376,48 @@ Modulation Index $m_p$ & No. of sidebands $n$ &  (a) as multiples of $f_m$ & (b)
 	5 & 16 & 16 & 3.2 \\
 	30 & 70 & 70 &2.3 \\
     \end{tabular}
+	\caption{Modulation index to bandwidths}
+	\label{tab:modind}
 \end{table}
+
+\section{Lecture 4}
+\begin{equation}
+B = n\cdot f_m = N\cdot\left(\frac{f_a}{mp}\right)
+\end{equation}
+Where $f_a=$ frequency deviation and $f_M$ = modulating frequency.
+
+E.g: For VHF/FM mono transmissions, the maximum value of $f_a=75\mbox{kHz}$ and the maximum value of $f_m=15\mbox{kHz}$ (speech and music quality).
+therefore $m = \frac{f_{a(max}}{f_{m(max)}} = 5$. Looking at table \ref{tab:modind} above, we can see that, for $m=5$ we need a bandwidth of $(3.2\times 75\mbox{kHz})=240\mbox{kHz}$. The reason why such a large bandwidth is needed is because F.M. causes the frequency changes to occur at a high rate, resulting in a much larger change in spectrum.
+
+\subsection{Zenith-GE FM Stereo System}
+The FM stereo signal has to have backwards compatibility with mono, and uses independent left ($L$) and right ($R$) signals. When a mono source is used, the stereo signal has to revert to a mono representation for backward compatibility. Conversely, when a stereo signal is received by a mono receiver, then the latter should be able to interpret the stereo as a mono source (forward compatibility).
+
+The L and R signals are formatted at the transmit end into ($\underbrace{L+R}_{\mbox{\scriptsize mono}}$) and ($\underbrace{L-R}_{\mbox{\scriptsize "stereo"}}$).
+
+The Zenith stereo signal, overall, uses both of the above. The ($L+R$) signal is baseband, and the ($L-R$) signal is used with DSB/SC (AM) at $38kHz$:-
+
+\begin{figure}[h]
+	\centering
+	\begin{tikzpicture}[xscale=0.25]
+		\draw[<->] (0,4) node[left]{Amplitude}--(0,0)--(56,0) node[below]{$f$};
+		\draw (0,3) -- (15,3) -- (16,0);
+		\draw[dotted] (15,0) node[below]{$15kHz$}--(15,3);
+		\draw[green] (23,0) -- (24,2.9) -- (37,2.9) -- (38,0) node[below] {$38kHz$}-- (39,2.9) -- (52, 2.9) -- (53,0);
+		\draw[->,blue,dotted](19,0)node[below, text width=1cm,align=center]{$19kHz$ pilot tone} -- (19,1.8); 
+		\draw (55,3)node[above] {DSB/SC};
+	\end{tikzpicture}
+	\label{fig:zenith}
+	\caption{Zenith-GE spectrum}
+\end{figure}
+The "pilot tone" is used a the receiver to generate $38kHz$ at the correct phase so as to be able to demodulate the ($L-R$), DSB/SC signal optimally. The ($L-R$) and pilot tone signals have to be constrained in amplitude to prevent "over modulation" of the FM carrier and this prevent distortions and consequent unwanted frequencies being generated. Typically, ($L-R$) is limited to 45\% of  its maximum value, in which case the overall signal (i.e. ($L+R$), pilot tone and ($L-R$)) never exceeds 90\% of the overall possible maximum amplitude. Note that ($L+R$) can be recovered directly by using a $15kHz$ low pass filter (LPF) at the receiver -- which is the mono component, and can be easily interpreted by a mono receiver.
+
+The ($L-R$) signal must be recovered using a $38kHz$ signal derived from the $19kHz\left(=\frac{38}{2}\right)$ pilot tone as mentioned. The base bandwidth of the stereo signal is $53kHz$ (from figure \ref{fig:zenith})
+
+Using Carson's Rule (an approximation), we can calculate the required overall FM bandwidth as
+\begin{equation}
+B = 2 \cdot \left[f_{a(max)}+f_{m(max)}\right]
+\end{equation}
+where $f_{a(max)} = 75kHz$ (to be compatible with mono) $f_m(max) = 53kHz$, therefore $B=256kHz$.
+
+FM has a SNR (signal to noise ratio) advantage over AM above a crtical threshold. Below the threshold the FM signal becomes unusable very quickly. FM as above is a simple form of "spread spectrum".
 \end{document}
