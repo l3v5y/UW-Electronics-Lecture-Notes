@@ -521,4 +521,130 @@
 		\caption{Time waveform corresponding to a complex pole on the imaginary axis of the Laplace s-plane}
 	\end{figure}
 	From equation \ref{eq:invltcomplex}, if a pair of complex poles are on the imaginary axis (i.e. $\alpha=0$) then response is sinusoidal where $\beta$ determines the frequency of oscillation.
+
+\section{}
+\section{Z Transform (ZT)}
+For a causal sequence $\left\{ x(n) \right\}$, ie $x(n)=0$ for $n<0$,
+\begin{equation}
+\left\{x(n)\right\} = \left\{x(0),x(1), x(2) \cdot x(n)\cdot\right\}
+\end{equation}
+its ZT is
+\begin{equation}
+X(z) = \sum^\infty_{n=0}x(n)z^-n
+\end{equation}
+Where z is a complex variable, and $z^{-n}$ denotes the position in time of $x(n)$.
+
+\begin{example}
+	\begin{eqnarray}
+		\left\{x(n)\right\} &=& \left\{2, 4, 1, 0, 6 \cdots \right\} \nonumber \\
+		X(z) &=&  2 z^0+4z^{-1} + z^{z-2}+0z^{-3}+6z^{-4}+\cdots
+	\end{eqnarray}
+\end{example}
+Inverse ZT
+\begin{eqnarray}
+	X(z)= x(0)z^0+x(1)z^{-1}+x(2)z^{-2}+\cdots+x(n)z^{-n} + \cdots \nonumber \\
+	\{x(n)\}&=&\{x(0), x(1), x(2), \cdots, x(n), \cdots \}
+\end{eqnarray}
+\begin{example}
+	\begin{eqnarray}
+		X(z) &=& \frac{z^{-2}-z^{-7}}{1-z{-1}} \\
+		X(z) &=& (z^{-2}-z^{-7})(1+z^{-1}+z^{-2}+\cdots+z^{-n} + \cdots\nonumber \\
+		&=& z^{-2}+z^{-3}+z^{-4}+z^{-5}+z^{-6} \nonumber \\
+		\{x(n)\}&=&\{0,0,1,1,1,1,1\}
+\end{eqnarray}
+\end{example}
+
+\subsection{Properties of ZT}
+\begin{enumerate}
+\item Linearity
+${x_1(n)}\leftrightarrow X_1(z)$ and ${x_2(n)}\leftrightarrow X_2(z)$ then ${x_1(n)}+{x_2(n)}\leftrightarrow X_1(z)+X_2(z)$
+\item
+Time shifting
+\begin{eqnarray}
+{y(n)}&=&{x(n-m)}\nonumber \\
+Y(z) &=& z^{-m}X(z)
+\end{eqnarray}
+ie, multiplying by $z^{-m}$ results in a delay of m sampling intervals.
+
+\begin{example}
+	\begin{eqnarray}
+		\left\{x(n)\right\} &=& \{5,4,3,2,1\} \nonumber \\
+		\{y(n)\} &=& \{-,5,4,3,2,1\} \nonumber \\
+		Y(z) &=& 0z^0+5z^{-1}+4z^{-2}+3z^{-3}+2z^{_4}+z^{-5} \nonumber \\
+		&=& z^{-1}(5+4z^{-1}+3z^{-2}+2z^{-3}+z^{-4}) \nonumber \\
+		&=& z^{-1}(X(z))
+\end{eqnarray}
+$y(n)$ is $x(n)$ delayed by one.
+\end{example}
+\item Scaling
+\begin{equation}
+k\{x(n)\}=\leftrightarrow kX(z)
+\end{equation}
+\end{enumerate}
+
+\subsection{ZT transfer function (ZT TF)}
+For a linear system ZT TF\begin{equation}
+ H(z) = \frac{C(z)}{R(z)}
+\end{equation}
+Where $\{c(n)\}$ is an output sequence and  $\{r(n)\}$  is an input sequence
+
+\subsection{Pulse transfer function}
+For $H(z)=\frac{C(z)}{R(z)}$ if $\{r(n)\} = \{1,0,0,\cdots\}$ (a unit impulse, ie, $R(z)=1$), then $C(z)=H(z)$ (pulse TF, which characterises the system).
+
+$\{c(n)\}$ - Impulse response (IR) 
+\begin{equation}
+	\{c(n)\} = \{h(n)\} \leftrightarrow H(z)
+\end{equation}
+ ie pulse TF is ZT of IR.
+
+\subsection{Linear shift Invariant (LSI) operations on sequences}
+\begin{enumerate}
+
+\item Multiplier (see Figure \ref{fig:multiplier})
+	\begin{figure}[h]
+		\centering
+		\begin{tikzpicture}
+			\draw[->] (0,0) node[below]{$x(n)$} -- (1,0);
+			\draw[-] (1,0) -- (1,0.5)  -- (2,0) -- (1,-0.5) node [below right]{a}--(1,0);
+			\draw[->] (2,0) -- (3,0) node[below]{$y(n)$};
+		\end{tikzpicture}
+		\caption{A multiplier}
+		\label{fig:multiplier}
+	\end{figure}
+
+\begin{equation}
+	\{y(n)\} = \{ a x(0), ax(1), \cdots, ax(n), \cdots \}
+\end{equation}
+
+\item Adder (see Figure \ref{fig:adder})
+	\begin{figure}[h]
+		\centering
+		\begin{tikzpicture}
+			\draw[->] (0,0) node[below]{$x_1(n)$} -- (1,0);
+			\draw (1.5,0) node{$+$} circle(0.5);
+			\draw[->] (1.5,1.5) node[right]{$x_2(n)$} -- (1.5,0.5);
+			\draw[->] (2,0) -- (3,0) node[below]{$y(n)$};
+		\end{tikzpicture}
+		\caption{An adder}
+		\label{fig:adder}
+	\end{figure}
+
+\begin{equation}
+	\{y(n)\} = \{ x_1(0)+x_2(0),x_1(1)+x_2(1), \cdots\}
+\end{equation}
+
+\item Delay unit (see fig 36)
+\begin{equation}
+	\{y(n)\} = D\{x(n)\}=\{x(n-1)\}
+\end{equation}
+\begin{example}
+	A moving averager (see fig 37)
+\begin{eqnarray}
+	y(n) &=& \frac{z(n)+x(n-1)}{2} \nonumber \\
+	\left\{y(n)\right\} &=& \frac{\{z(n)\}+\{x(n-1)\}}{2} \nonumber \\
+	Y(z) &=& \frac{X(z)+Z^{-1}X(Z)}{2} \nonumber \\
+	H(z) &=& \frac{Y(z)}{X(z)} = \frac{1-z^{-1}}{2} = \frac {z+1}{2}
+\end{eqnarray}
+\end{example}
+\end{enumerate}
 \end{document}
