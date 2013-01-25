@@ -605,7 +605,7 @@ $\{c(n)\}$ - Impulse response (IR)
 		\centering
 		\begin{tikzpicture}
 			\draw[->] (0,0) node[below]{$x(n)$} -- (1,0);
-			\draw[-] (1,0) -- (1,0.5)  -- (2,0) -- (1,-0.5) node [below right]{a}--(1,0);
+			\draw[-] (1,0) -- +(0,0.5)  -- +(1,0) -- +(0,-0.5) node [below right]{a}--+(0,0);
 			\draw[->] (2,0) -- (3,0) node[below]{$y(n)$};
 		\end{tikzpicture}
 		\caption{A multiplier}
@@ -633,18 +633,47 @@ $\{c(n)\}$ - Impulse response (IR)
 	\{y(n)\} = \{ x_1(0)+x_2(0),x_1(1)+x_2(1), \cdots\}
 \end{equation}
 
-\item Delay unit (see fig 36)
+\item Delay unit (see Figure \ref{fig:delay})
+	\begin{figure}[h]
+		\centering
+		\begin{tikzpicture}
+			\draw[->] (0,0) node[below]{$x(n)$} -- (1,0);
+			\draw[-] (1,0) -- +(0,0.5)  -- +(1,0.5) -- +(1,-0.5)-- +(0,-0.5) --+(0,0);
+			\draw (1.5,0) node {d};
+			\draw[->] (2,0) -- (3,0) node[below]{$y(n)$};
+		\end{tikzpicture}
+		\caption{A delay unit}
+		\label{fig:delay}
+	\end{figure}
+
 \begin{equation}
 	\{y(n)\} = D\{x(n)\}=\{x(n-1)\}
 \end{equation}
 \begin{example}
-	A moving averager (see fig 37)
-\begin{eqnarray}
-	y(n) &=& \frac{z(n)+x(n-1)}{2} \nonumber \\
-	\left\{y(n)\right\} &=& \frac{\{z(n)\}+\{x(n-1)\}}{2} \nonumber \\
-	Y(z) &=& \frac{X(z)+Z^{-1}X(Z)}{2} \nonumber \\
-	H(z) &=& \frac{Y(z)}{X(z)} = \frac{1-z^{-1}}{2} = \frac {z+1}{2}
-\end{eqnarray}
+	A moving averager (see Figure \ref{fig:averager})
+	\begin{figure}[h]
+		\centering
+		\begin{tikzpicture}
+			\draw[->] (0,0) node[below]{$x(n)$} -- (1,0); % draw input node
+			\draw[<->] (2,-1) -- (1,-1) -- (1,1) -- (4,1) -- (4,0.5); % Draw paths
+			\draw (4,0) node{$+$} circle(0.5); % draw adder
+			\draw[-] (2,-1) -- +(0,0.5)  -- +(1,0.5) -- +(1,-0.5)-- +(0,-0.5) --+(0,0); % draw delay unit
+			\draw (2.5,-1) node {D}; % draw d in delay unit
+			\draw[->] (3,-1)  -- (4,-1) node[below]{$x(n-1)$} -- (4,-0.5); % arrow to adder
+			\draw[->] (4.5,0) -- +(1,0); % arrow to multiplier
+			\draw[-] (5.5,0) -- +(0,0.5)  -- +(1,0) node [below]{$\frac{1}{2}$} -- +(0,-0.5) --+(0,0);
+			\draw[->] (6.5,0) -- +(1,0) node[below]{$y(n)$}; % arrow to multiplier
+		\end{tikzpicture}
+		\caption{A moving averager}
+		\label{fig:averager}
+	\end{figure}
+	
+	\begin{eqnarray}
+		y(n) &=& \frac{z(n)+x(n-1)}{2} \nonumber \\
+		\left\{y(n)\right\} &=& \frac{\{z(n)\}+\{x(n-1)\}}{2} \nonumber \\
+		Y(z) &=& \frac{X(z)+Z^{-1}X(Z)}{2} \nonumber \\
+		H(z) &=& \frac{Y(z)}{X(z)} = \frac{1-z^{-1}}{2} = \frac {z+1}{2}
+	\end{eqnarray}
 \end{example}
 \end{enumerate}
 \end{document}

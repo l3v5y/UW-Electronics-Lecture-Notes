@@ -420,4 +420,118 @@ B = 2 \cdot \left[f_{a(max)}+f_{m(max)}\right]
 where $f_{a(max)} = 75kHz$ (to be compatible with mono) $f_m(max) = 53kHz$, therefore $B=256kHz$.
 
 FM has a SNR (signal to noise ratio) advantage over AM above a crtical threshold. Below the threshold the FM signal becomes unusable very quickly. FM as above is a simple form of "spread spectrum".
+
+
+\begin{figure}[h]
+	\centering
+	\begin{tikzpicture}
+	\end{tikzpicture}
+	\label{fig:zenithreciever}
+	\caption{Zenith-GE reciever diagram}
+\end{figure}
+
+\section{Superheterodyne receiver}
+\textsc{superheterodyne} or "Superhet"
+
+\begin{figure}[h]
+	\centering
+	\begin{tikzpicture}
+	\end{tikzpicture}
+	\label{fig:superhetrec}
+	\caption{Superheterodyne reciever}
+\end{figure}
+
+A mixer is (typically) a device (or system) of the following characteristic:-
+	\begin{equation}
+		v_0 = k_1v_i+k_2v_i^2+k_3v_i^3 \cdots
+	\end{equation}
+	Wehre $v_o$ is the output voltage, $v_i$ is the input voltage and $k_1 \cdots k_n$ are coefficients.
+
+If we let $v_i=a_1 \cos{\omega_1t} + \_2 \cos{\omega_2t} \label{eq:het}$ ($\omega_1=2\pi f_1$...)
+
+It may be shown that the effect f the polynomial expression is to produce a spectrum of signals at the output involving:-
+\begin{equation}
+f_1, f_2, (f_1\pm f_2), *2f_1\pm f_2), (2f_2 \pm f_1)\cdots
+\end{equation}
+Where the optimal polynomial expression for a mixer is
+\begin{eqnarray}
+v_0 &=& k_2 v_i^2 \mbox{ so using equation \ref{eq:het}} \nonumber \\
+&=& k_2(a_1 \cos{\omega_1t} + \_2 \cos{\omega_2t})^2 \nonumber \\
+&=& k_2(a_1^2 \cos^2{\omega_1t} + 2a_1a_2\cos{\omega_1t}\cos{\omega_2t}+ a^2_2\cos^2{\omega_2t}\nonumber \\
+&=& k_2(\frac{a_1^2}{2}(1+\cos{2\omega_1t})+
+\frac{2a_1 a_2}{2}(\cos{(\omega_1+\omega2 )t}+\cos{(\omega_1-\omega_2)t})+\frac{a_2^2}{2}(1+cos{2\omega_2t}) 
+\end{eqnarray}
+DC term
+\begin{equation}
+k_2\left(\frac{a_1^2}{2} + \frac{a_2^2}{2}\right)
+\end{equation}
+
+$2\omega_1$ term
+\begin{equation}
+	k_2\frac{a_1^2}{2}\cos{2\omega_1t}
+\end{equation}
+
+$2\omega_2$ term
+\begin{equation}
+	k_2\frac{a_1^2}{2}\cos{2\omega_2t}
+\end{equation}
+
+Sum ($\omega_1+\omega_2$) term
+\begin{equation}
+a_1 a_2(\cos{(\omega_1+\omega2 )t}
+\end{equation}
+
+Difference term ($\omega_1 - \omega2$)
+\begin{equation}
+a_1 a_2(\cos{(\omega_1-\omega2 )t}
+\end{equation}
+
+The useful frequency in this case is ($\omega_2-\omega_1$) (or ($\omega_1-\omega_2$) depending on which is the larger), which is the Intermediate Frequency (IF). To extract this in a superhet receiver, a bandpass filter centered at )$\omega_2 - \omega_1$) is used. All other frequencies are filtered out.
+
+E.G. Suppose we are receiving 540kHz in the "Medium wave" band. Suppose also we use 440kHz as the I.F. We can now choose two different local oscillator frequencies (i.e. for $f_2$) which give the same I.F. It can be either 0.1MHz (100kHz) or 980kHz.
+
+Using another example, suppose we need to receive 1.6MHz, then the local oscillator could be either 1.16MHz or 2.04MHz. Overall, therefore, the local oscillator could tune from 0.1MHz to 1.16MHz or from 0.98MHz to 2.04MHz
+
+Conventionally, we always choose the solution requiring the smaller percentage frequency changes. In ths example, if we calculate $\frac{f_{max}-f_{min}}{f_{max}}$ for the L.O. (Local Oscillator) in each case, then for the range 0.1MHz to 1.16MHz we have
+\begin{equation}
+\frac{f_{max}-f_{min}}{f_{max}} = \frac{1.16-0.1}{1.16} = 0.91
+\end{equation}
+
+For 1.6MHz to 2.04MHz
+\begin{equation}
+	\frac{f_{max}-f_{min}}{f_{max}} = \frac{2.04-0.98}{2.04} = 0.52
+\end{equation}
+The second option is the one chosen.
+
+Alternatively, we have the following dilemma
+\begin{figure}[h]
+	\centering
+	\begin{tikzpicture}
+	\end{tikzpicture}
+	\label{fig:superhetex}
+	\caption{Superheterodyne receiver}
+\end{figure}
+
+The second problem with the superhet approach is that it can ``double tune'' i.e. in the above example either 1.5MHz or 0.5MHz produces the same IF at 0.5MHz in this case. Conventionally we would receive the 0.5MHz signal in order for the LO to be greater than $f_1$, the input frequency.
+
+To ensure this, we need to filter out the ``wrong'' input frequency ($f_2+I.F.$):-
+\begin{figure}[h]
+	\centering
+	\begin{tikzpicture}
+	\end{tikzpicture}
+	\label{fig:superhetbpf}
+	\caption{Superheterodyne receiver}
+\end{figure}
+
+The ``wrong'' frequency is called the Image Frequency. Normally, ``tracking'' is used:-
+\begin{figure}[h]
+	\centering
+	\begin{tikzpicture}
+	\end{tikzpicture}
+	\label{fig:superhettracking}
+	\caption{Superheterodyne receiver}
+\end{figure}
+
+The L.O. frequency and BPF centre frequency change at the same time. This is called \textsc{tracking}. The B.P.F is arranged to have the minimum bandwidth necessary, but if the L.O. frequency is increased, so the centre frequency at the B.P.F is increased by the same amount.
+
 \end{document}
