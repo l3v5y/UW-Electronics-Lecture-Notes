@@ -18,9 +18,8 @@
 
 
 \begin{document}
-\section{Lecture \ref{sec:lec1} - Modulation}
-	\label{sec:lec1}
-		\begin{equation}
+\section{Modulation}
+	\begin{equation}
 		f(t) = \underbrace{A_c}_{\mbox{\scriptsize Amplitude}} \times \cos(\overbrace{\omega}^{\mbox{\scriptsize Angular frequency}} t + \underbrace{\phi _c}_{\mbox{\scriptsize Phase term}})
 		\label{eq:radio}
 	\end{equation}
@@ -74,7 +73,7 @@
 
 		$m = \mbox{modulation depth} = \left(\frac{A_m}{A_0}\right)$ which is a ratio of modulation voltage to the carrier voltage (or current).
 
-		It is essential not to let $|m|\ge 1$ because this is overmodulation and it distorts the AM waveform.
+		It is essential not to let $|m|\ge 1$ because this is over-modulation and it distorts the AM waveform.
 
 		Going back to equation \ref{eqn:power}  in the limit $m=1$ and so the ratio is:-
 		\begin{equation}
@@ -128,23 +127,21 @@
 
 		If the carrier frequency is high compared to the modulation frequency, the recovered envelope is a ``quite good'' approximation to the original given a certain combination of $R_L$ and $C$.
 
-\section{Lecture \ref{sec:lec2} - Double Sideband and Single Sideband AM}
-	\label{sec:lec2}
-
+\section{Double Sideband and Single Sideband AM}
 	Recall AM signal (Equation \ref{eqn:am}. Power is wasted in the carrier, so a better form of A.M. could be:-
 	\begin{equation}
 		f(t) = A_0 \cdot \cos{\omega_0} \cdot m\cos{\omega_m t}
 	\end{equation}
-	Where $m=\frac{A_m}{A_0} = \mbox{modulating depth}$ and $A_m = \mbox{amplitide of modulating signal}$
+	Where $m=\frac{A_m}{A_0} = \mbox{modulating depth}$ and $A_m = \mbox{amplitude of modulating signal}$
 
 	\begin{equation}
 		f(t) = \left(\frac{A_0m}{2}\right)
 		\left(\cos{(\omega_0 +  \omega_m)t}+\cos{(\omega_0 - \omega_m)t}\right)
 	\end{equation}
 
-	This is known as double sided sideband, supressed carrier (DSB).
+	This is known as double sided sideband, suppressed carrier (DSB).
 
-	There is an important property of a DSB $\rightarrow$ for no modulation, no signal is sent, so that it is very power effiicient, but not bandwidth efficient.
+	There is an important property of a DSB $\rightarrow$ for no modulation, no signal is sent, so that it is very power efficient, but not bandwidth efficient.
 
 	\begin{figure}[h]
 		\begin{tikzpicture}
@@ -169,6 +166,7 @@
 			\draw[<->](0,1) --  (0,0)--(2*pi,0);
 			\draw[color=red,domain=0:2*pi,samples=200,smooth] plot (\x,{sin(\x r)});
 			\draw[color=green,domain=0:2*pi,samples=200,smooth] plot (\x,{-sin(\x r)});
+			\draw[domain=0:2*pi, samples=800, smooth] plot(\x,{sin(\x r)*sin(20*\x r)});
 		\end{tikzpicture}
 		\caption{DSB Signal envelope}
 	\end{figure}
@@ -189,7 +187,7 @@
 		\caption{Product detector/mixer/multiplexer with simple input}
 	\end{figure}
 
-	The output after filtering is $\left(\frac{A_0E}{2}\right)$ which is proportinal to $A_0$, the signal amplitude.
+	The output after filtering is $\left(\frac{A_0E}{2}\right)$ which is proportional to $A_0$, the signal amplitude.
 	\begin{figure}[h]
 		\begin{tikzpicture}
 			\draw[->] (0,0) node[ left]{$A_0\cos{\omega_0t}$} -- (1,0);
@@ -225,13 +223,44 @@
 	\begin{equation}
 		f(t) = \left(\frac{A_0m}{2} \right) \cos{\left(\omega_0 + \omega_m\right)}t + \left(\frac{A_0m}{2} \right)  \cos{\left(\omega_0 - \omega_m\right)}t 
 	\end{equation}
-	If we filter carfully, then we need only send either the USB or LSB.
+	If we filter carefully, then we need only send either the USB or LSB.
+	\begin{figure}[h]
+		\centering
+		\begin{tikzpicture}[xscale=2]
+			\draw[<->](0,2) --  (0,0)--(3,0);
+			\draw[color=red,smooth,rounded corners](0,1) node[black,above right]{Low pass} -- +(1,0)  plot coordinates{+(1,0) +(1.5,-1)};
+			\draw[color=green,smooth,rounded corners](3,1) node[black,above left]{High pass}  -- +(-1,0)  plot coordinates{+(-1,0) +(-1.5,-1)};
+			\draw[->] (1,0) node [below]{$f_c-f_m$} -- +(0,1);
+			\draw[->] (2,0) node [below]{$f_c+f_m$} -- +(0,1);
+			\draw[help lines] (1.5,0) -- +(0,1) node[black,above]{$f_c$};
+		\end{tikzpicture}
+		\caption{Filtering}
+	\end{figure}
 
-	% Filter image...
+	Filtering therefore reduces the bandwidth, as each sideband carries the same information (each has an ``m'' term). Difficulty arises in obtaining sharp cutoff filters. The \textsc{phasing method} can be used to generate SSB (single side band).
 
-	Filtering therefore reduces the bandwidth, as each sideband carries the same information (each has an ``m'' term). Difficulty arises in obtaining sharp cutoff filters. The PHASING METHOD can be used to generate SSB (single side band).
-
-% SSB diagram
+	\begin{figure}[h]
+		\centering
+		\begin{tikzpicture}
+			%\draw[help lines] (0,-5) grid (5,1);
+			\draw[->] (0,0) node[left,text width=4cm,align=center]{$f_0(t) = A_0\cos{\omega_0 t}$ carrier}-- +(2,0);	% carrier signal to multiplexer
+			\draw	(2,-0.5) rectangle +(1,1) node at +(0.5,0.5) {$\times$} ;	 % carrier multiplexer
+			\draw[->] (0.5,0) -- +(0,-3) --+(0.5,-3); % arrow to carrier delay
+			\draw	(1,-3.25) rectangle +(0.5,0.5) node at +(0.25,0.25) {$\frac{\pi}{2}$} ; % delay for carrier
+			\draw[->] ( 1.5,-3) -- (2,-3); % arrow from carrier delay to multiplexer
+			\draw	(2,-3.5) rectangle +(1,1) node at +(0.5,0.5) {$\times$} ;	% modulation multiplexer
+			\draw[->] (0,-2) node[left,text width=4cm,align=center]{$f_m(t) = \cos{\omega_0 t}$ modulation} -- +(0.75,0) -- +(0.75,0.5) -- +(1.5,0.5);	 % modulation signal to delay
+			\draw	(1.5,-1.75) rectangle +(0.5,0.5) node at +(0.25,0.25) {$\frac{\pi}{2}$} ; % modulation delay
+			\draw[->] (2,-1.5) -- +(0.5,0) -- +(0.5,1); % arrow from modulation  delay to carrier multiplexer
+			\draw[->] (0.75,-2) -- +(0,-2) -- +( 1.75,-2)	--+(1.75,-1.5); % modulation to multiplexer
+			
+			\draw[->] (3,0) node[above right]{$E_1$}-- +(1.5,0) --  +(1.5,-2.5);
+			\draw[->] (3,-3) node[below right]{$E_2$} -- +(1,0);
+			\draw	(4,-3.5) rectangle +(1,1) node at +(0.5,0.5) {$+$} ;	 % carrier multiplexer
+			\draw[->] (5,-3) -- +(1,0) node[below]{$E_0$};
+		\end{tikzpicture}
+		\caption{Phasing method}
+	\end{figure}
 
 	\begin{equation}
 		E_0 = E_1+E_2
@@ -258,16 +287,22 @@
 
 	\subsection{Vestigial Sideband}
 		Remember all the abbreviations, ``in case they get slipped into a question''
-		This is an approximation to SSB which has been used extensively in analogue T.V. ver many decades. Basically, a DSB/C (Double Sideband with Carrier)
+		This is an approximation to SSB which has been used extensively in analogue T.V. over many decades. Basically, a DSB/C (Double Sideband with Carrier)
 
-		% Vestigial sideband plot...
+		\begin{figure}[h]
+			\centering
+			\begin{tikzpicture}
+				
+			\end{tikzpicture}
+			\caption{Vestigial sideband}
+		\end{figure}
 
 		The main benefits are: simplicity and cheapness compared to SSB, when using valve/vacuum tube technologies.
 
 		The disadvantage is carrier still there, wasting power, but allowing an envelope detector (cheap, easy to make) to be used.
 
-\section{Lecture 3 - Angle Modulation}
-	Starting with \ref{eq:rf}
+\section{Angle Modulation}
+	Starting with equation \ref{eq:radio}
 	\begin{equation}
 		f(t) = A_0 \cdot \cos\left(\omega_0t+\phi\right)
 	\end{equation}
@@ -294,14 +329,46 @@
 	This is frequency modulation.
 
 	Frequency modulation is thus an indirect form of pulse modulation and is mathematically related.
+	\begin{figure}[h]
+		\centering
+		\begin{tikzpicture}
+			\draw[->] (0,0) node[left]{$f_m(t)$} -- +(1,0);
+			\draw +(1,-0.5) rectangle +(2,0.5) node at +(1.5,0) {$\int dt$};
+			\draw[->] +(2,0) node[above right]{$\int{f_m(t)\,dt}$}--+(4,0);
+			\draw +(4,-0.5) rectangle +(6,0.5) node[text width=2cm,align=center] at +(5,0) {Phase Modulator};
+			\draw[->]  +(6,0) -- (7,0) node[right]{FM};
 
-	% Diagram
+
+			\draw[->] (0,-2) node[left]{$f_m(t)$} -- +(1,0);
+			\draw +(1,-2.5) rectangle +(2,-1.5) node at +(1.5,-2) {$\frac{d}{dt}$};
+			\draw[->] +(2,-2) node[above right]{$\frac{d f_m(t)}{dt}$}--+(4,-2);
+			\draw +(4,-2.5) rectangle +(6,-1.5) node[text width=2cm,align=center] at +(5,-2) {Frequency Modulator};
+			\draw[->]  +(6,-2) -- (7,-2) node[right]{PM};
+
+		\end{tikzpicture}
+		\caption{Relation between FM and PM}
+	\end{figure}
+			
 
 	Phase and frequency modulation are thus similar in form and are both angle modulation.
 
 	Frequency modulation can be generated easily using a voltage controlled oscillator.
 
-	% VCO diagraom
+	\begin{figure}[h]
+		\centering
+		\begin{tikzpicture}
+			\draw[->] (0,0) node[above]{$v_{in}$} -- (1,0);
+			\draw (1,-0.5) rectangle (2,0.5) node at (1.5,0) {VCO};
+			\draw[->] (2,0)--(3,0)  node[above]{$f_o$};
+
+			\draw (4.5,-1.5) -- (4.5,1.5) node[left]{$f_0$} (4,-1) -- (7,-1)  node[below]{$v_{in}$};
+			\draw[->] (4.5,-1) -- (7,1.5);
+
+			\draw[dotted] (4.5,-0.5) node[left]{$f_1$} -- (5,-0.5) -- (5,-1) node[below]{$v_1$};
+			\draw[dotted] (4.5,1.0) node[left]{$f_2$} -- (6.5,1) -- (6.5,-1) node[below]{$v_2$};
+		\end{tikzpicture}
+		\caption{Voltage Controlled Oscillator (VCO)}
+	\end{figure}
 
 	\subsection{Detection of FM}
 		An FM discriminator (or Phase Locked Loop) is used to convert frequency changes to amplitude changes:-
@@ -371,7 +438,7 @@
 			\label{tab:modind}
 		\end{table}
 
-\section{Lecture 4}
+\section{Frequency Modulation}
 	\begin{equation}
 		B = n\cdot f_m = N\cdot\left(\frac{f_a}{mp}\right)
 	\end{equation}
@@ -383,7 +450,7 @@
 	The reason why such a large bandwidth is needed is because F.M. causes the frequency changes to occur at a high rate, resulting in a much larger change in spectrum.
 
 	\subsection{Zenith-GE FM Stereo System}
-		The FM stereo signal has to have backwards compatibility with mono, and uses independent left ($L$) and right ($R$) signals. When a mono source is used, the stereo signal has to revert to a mono representation for backward compatibility. Conversely, when a stereo signal is received by a mono receiver, then the latter should be able to interpret the stereo as a mono source (forward compatibility).
+		The FM stereo signal has to have backwards compatibility with mono, and uses independent left ($L$) and right ($R$) signals. When a mono source is used, the stereo signal has to revert to a mono representation for backward compatibility. 				Conversely, when a stereo signal is received by a mono receiver, then the latter should be able to interpret the stereo as a mono source (forward compatibility).
 
 		The L and R signals are formatted at the transmit end into ($\underbrace{L+R}_{\mbox{\scriptsize mono}}$) and ($\underbrace{L-R}_{\mbox{\scriptsize ``stereo''}}$).
 
@@ -421,25 +488,25 @@
 			\begin{tikzpicture}
 			\end{tikzpicture}
 			\label{fig:zenithreciever}
-			\caption{Zenith-GE reciever diagram}
+			\caption{Zenith-GE receiver diagram}
 		\end{figure}
 
-\section{Superheterodyne receiver}
-	\textsc{superheterodyne} or ``Superhet''
+\section{Super-heterodyne}
+	\textsc{super-heterodyne} or ``Superhet''
 
 	\begin{figure}[h]
 		\centering
 		\begin{tikzpicture}
 		\end{tikzpicture}
 		\label{fig:superhetrec}
-		\caption{Superheterodyne reciever}
+		\caption{Super-heterodyne receiver}
 	\end{figure}
 
 	A mixer is (typically) a device (or system) of the following characteristic:-
 		\begin{equation}
 			v_0 = k_1v_i+k_2v_i^2+k_3v_i^3 \cdots
 		\end{equation}
-		Wehre $v_o$ is the output voltage, $v_i$ is the input voltage and $k_1 \cdots k_n$ are coefficients.
+		Where $v_o$ is the output voltage, $v_i$ is the input voltage and $k_1 \cdots k_n$ are coefficients.
 
 	If we let $v_i=a_1 \cos{\omega_1t} + \_2 \cos{\omega_2t} \label{eq:het}$ ($\omega_1=2\pi f_1$...)
 
@@ -490,7 +557,7 @@
 
 	Using another example, suppose we need to receive 1.6MHz, then the local oscillator could be either 1.16MHz or 2.04MHz. Overall, therefore, the local oscillator could tune from 0.1MHz to 1.16MHz or from 0.98MHz to 2.04MHz
 
-	Conventionally, we always choose the solution requiring the smaller percentage frequency changes. In ths example, if we calculate $\frac{f_{max}-f_{min}}{f_{max}}$ for the L.O. 
+	Conventionally, we always choose the solution requiring the smaller percentage frequency changes. In this example, if we calculate $\frac{f_{max}-f_{min}}{f_{max}}$ for the L.O. 
 	(Local Oscillator) in each case, then for the range 0.1MHz to 1.16MHz we have
 	\begin{equation}
 		\frac{f_{max}-f_{min}}{f_{max}} = \frac{1.16-0.1}{1.16} = 0.91
@@ -508,7 +575,7 @@
 		\begin{tikzpicture}
 		\end{tikzpicture}
 		\label{fig:superhetex}
-		\caption{Superheterodyne receiver}
+		\caption{Super-heterodyne receiver}
 	\end{figure}
 
 	The second problem with the superhet approach is that it can ``double tune'' i.e. in the above example either 1.5MHz or 0.5MHz produces the same IF at 0.5MHz in this case.
@@ -520,7 +587,7 @@
 		\begin{tikzpicture}
 		\end{tikzpicture}
 		\label{fig:superhetbpf}
-		\caption{Superheterodyne receiver}
+		\caption{Super-heterodyne receiver}
 	\end{figure}
 
 	The ``wrong'' frequency is called the Image Frequency. Normally, ``tracking'' is used:-
