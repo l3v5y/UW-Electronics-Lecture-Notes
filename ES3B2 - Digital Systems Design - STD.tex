@@ -1,0 +1,38 @@
+\documentclass[a4paper,twocolumn]{article}
+
+\input{./preamble}
+\title{ES3B2 \\ Digital Systems Design\\ STD}
+\input{./author}
+\usepackage{listings}
+\lstset{language=VHDL}
+
+\begin{document}
+	\section{VHDL}
+		Every VHDL structure must have an entity,
+		which describes the appearance of the defice externally,
+		and an architecture that defines the way it implements the entity.
+
+		All connections are PORTs, which must be uniquely named in the entity definition.
+		They can have a mode (IN, OUT, INOUT, BUFFER)
+		a type (BIT, BIT\_VECTOR)
+		and a set of levels (BIT\_VECTOR (0 TO 3)).
+
+		Variables are known as  SIGNALs, which have the same properties as PORTs.
+
+		The entitry
+
+\begin{lstlisting}
+ENTITY logic IS PORT
+(
+	a,b,c: INBIT;
+	f: OUT BIT);
+END logic;
+
+ARCHITECTURE archlogic OF logic IS
+	SIGNAL d:BIT
+BEGIN
+	d <= a AND b;
+	g : nor2 PORT MAP (c,d,f);
+END archlogic;
+\end{lstlisting}
+\end{document}
