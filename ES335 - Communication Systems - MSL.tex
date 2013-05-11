@@ -1,4 +1,4 @@
-\documentclass[a4paper]{article}
+\documentclass[a4paper,twocolumn]{article}
 
 \input{./preamble}
 \title{ES335 \\ Communication Systems \\ MSL}
@@ -22,12 +22,10 @@
 			\begin{equation}
 				\infint f(x) dx =1
 			\end{equation}
-
 			Expectation $E[X]$ and variance $\sigma^2$ are given in the databook.
 
 			\subsubsection{Fourier Transforms}
 				Fourier Transforms (F) changes between time domain and frequency domain
-
 				\begin{align}
 					X(f)= F \left\{ x(t) \right\} & = \infint x(t)e^{-j 2 \pi f t} dt\\
 					x(t) = F ^{-1}\left\{ X(f) \right\} & = \infint X(f)e^{j 2 \pi f t} dt
@@ -38,30 +36,25 @@
 				\begin{equation}
 					\delta (x-a)=a \qquad x\ne a
 				\end{equation}
-
 				Normalised
 				\begin{equation}
 					\infint 	\delta (x-a) dx = 1
 				\end{equation}
-
 				Sifting
 				\begin{equation}
 					\infint f(x) \delta(x-a)dx =f(a)
 				\end{equation}
-
 				Fourier transform of delta function
 				\begin{equation}
 					\infint \delta (f \pm f_0) e^{\pm j 2 \pi f \tau} df = e^{\pm j 2 \pi f_0 \tau}
 				\end{equation}
 
 			\subsubsection{Transfer function}
-				The FT of an impulse response is the transfer function
-
+				The FT of an impulse response is the transfer function.
 				For an RC circuit the impulse  is given by \cref{eq:rc_ir}.
 				\begin{equation}
 					h(t) = \frac{1}{RC}e^{-\frac{t}{RC}} \qquad t\ge 0 \label{eq:rc_ir}
 				\end{equation}
-
 				The transfer function is given by \cref{eq:rc_tf}
 				\begin{equation}
 					H(t) = \frac{1}{1+j2\pi f RC}\label{eq:rc_tf}
@@ -73,7 +66,6 @@
 					R_{ff}(\tau) &= \infint f(t)f^\ast(t-\tau) d\tau
 				\end{align}
 				Where $f^\ast$ represents the complex conjugate (real function, $f\ast = f$).
-
 				Also,
 				\begin{equation}
 					R_{xx} = E \left\{ x(t)x(t-\tau) \right\}=E \left\{x(t+\tau)x(t)\right\}
@@ -83,13 +75,13 @@
 			\subsubsection{Signal Energey and Power}
 				The energy of a signal is given by
 				\begin{equation}
-					E = \infint \left| f(t)\right|^2 dt \mathrm{Joules}
+					E = \infint \left| f(t)\right|^2 dt \qquad \mathrm{Joules}
 				\end{equation}
 				which is a slight problem for infinitely long signals, so practaically,
 				\begin{equation}
-					P =\lim_{T \to \infty} \frac{1}{T} \int^{\frac{T}{2}}_{-\frac{T}{2}} \left| f(t)\right|^2 dt \mathrm{Watts}
+					P =\lim_{T \to \infty} \frac{1}{T} \int^{\frac{T}{2}}_{-\frac{T}{2}} 
+					\left| f(t)\right|^2 dt \qquad \mathrm{Watts}
 				\end{equation}
-
 				The DC power is given from the autocorrelation function
 				\begin{equation}
 					\lim_{\tau \to \pm\infty}\left\{ R_{x}(\tau) \right\}
@@ -97,15 +89,17 @@
 				and the mean power is given as
 				\[R_x(0)\]
 
-			\subsubsection{Parsevcal's Theorem}
+			\subsubsection{Parseval's Theorem}
 				\begin{equation}
 					E =  \infint \left| f(t)\right|^2 dt =
-					\infint \underbrace{ \left| F(t)\right|^2 }_{\text{Energy Density}} df \mathrm{Joules}
+					\infint \underbrace{ \left| F(t)\right|^2 }_{\text{Energy Density}} df 
+					\qquad \mathrm{Joules}
 				\end{equation}
 				or
 				\begin{equation}
-					P =\lim_{T \to \infty} \frac{1}{T} \int^{\frac{T}{2}}_{-\frac{T}{2}} \left| f(t)\right|^2 dt =
-					\infint \underbrace{ \left| S(f)\right| }_{\text{Power Spectral Density}} df
+					P =\lim_{T \to \infty} \frac{1}{T} \int^{\frac{T}{2}}_{-\frac{T}{2}} 
+					\left| f(t)\right|^2 dt =
+					\infint \underbrace{ \left| S(f)\right| }_{\text{PSD}} df \qquad
 					\mathrm{Watts}
 				\end{equation}
 			\subsubsection{Wiener-Kinchine Theorem}
@@ -114,25 +108,138 @@
 						P(f) &= F(R(\tau)) \\
 						R(\tau) &= F^{-1}(P(f))
 					\end{align}
-			\subsection{Digitisation}
-				Sample is quantised into multiple steps
-				\subsubsection{Sampling}
-				SQER is given by
-					\begin{equation}
-						sqer = \frac{3N^2}{2}
-					\end{equation}
-				Where N is the number of steps between limits.
+		\subsection{Digitisation}
+			Sample is quantised into multiple steps
+			\subsubsection{Sampling}
+			SQER is given by
+				\begin{equation}
+					sqer = \frac{3N^2}{2}
+				\end{equation}
+			Where N is the number of steps between limits.
 
-				Highest frequency measurable is signal rate divided by 2 word length
+			Highest frequency measurable is signal rate divided by 2 word length
+	\section{Part 2}
+		\subsection{Baseband Pulse Transmission}
+			\subsubsection{Gaussian Noise Model}
+				\begin{equation}
+					p(v) \frac{1}{\sigma \sqrt{2 \pi}}
+					\exp\left( -\frac{(v - \overline{v})^2}{2\sigma^2}\right)
+				\end{equation}
+				For thermal noise, zero mean, so $\overline{v} =0$. PSD is constant, usually
+				$\frac{N_0}{2}$
 
-\section{Part 2}
-\subsection{Baseband Pulse Transmission}
+	\section{Part 3}
+		\subsection{Modulated Data Transmission}
+			\subsubsection{Amplitude Shift Keying}
+				ASK, also known as OOK is very simple, but susceptable to noise.
+				If the signal amplitude is small, SNR is poor.
+				Tends to be avoided.
+				\begin{equation}
+					f(t) = \begin{cases}
+					A_cos(2\pi f_ct) & 0\le t < T \quad \text{`'1'}\\
+								0 & 0\le t < T \quad \text{`'0'}
+								\end{cases}
+				\end{equation}
+				with T the bit time, and $\frac{1}{T}$ the signalling rate.
+				The bandwidth is $\frac{2}{T}$.
+				\begin{equation}
+					P_e = \frac{1}{2} erfc \left[ \frac{A_c}{2 \sqrt{2} \sigma}\right]
+				\end{equation}
+				The energy per bit $E_b$ is half $E_d$, given by
+				\begin{equation}
+					P_e = \frac{1}{2} erfc \left[ \frac{E-b}{2 N_0}\right]
+				\end{equation}
 
-\section{Part 3}
-\subsection{Modulated Data Transmission}
+			\subsubsection{Frequency Shift Keying}
+				Easy to implement, but bandwidth heavy. Used in low data rate situations
+				\begin{equation}
+					f(t) = \begin{cases}
+						A_c\cos(2\pi f_1t) & 0\le t < T \quad \text{`'1'}\\
+						A_c\cos(2\pi f_0t) & 0\le t < T \quad \text{`'0'}
+								\end{cases}
+				\end{equation}
+				PSD is
+				\begin{equation}
+					\frac{1}{T} + \frac{1}{T}+f_1-f_0 =
+						2B_t\left( 1+ \frac{\delta f}{2 B_T} \right)
+				\end{equation}
+				Can be detected with two BPFs, one at $f_0$ and one at $f_1$.
+				\begin{equation}
+					P_e = \frac{1}{2} erfc \left[ \frac{A_c}{2\sigma}\right]
+				\end{equation}
+				The energy per bit $E_b$ is half $E_d$, given by
+				\begin{equation}
+					P_e = \frac{1}{2} erfc \left[ \frac{E-b}{2 N_0}\right]
+				\end{equation}
 
-\section{Part 4}
-\subsection{ECC}
+			\subsubsection{Phase Shift Keying}
+				Same bandwidth as ASK, but best error performance
+				\begin{equation}
+					f(t) = \begin{cases}
+						A_c\cos(2\pi f_ct) & 0\le t < T \quad \text{`'1'}\\
+						-A_c\cos(2\pi f_ct) & 0\le t < T \quad \text{`'0'}
+								\end{cases}
+				\end{equation}
+				\begin{equation}
+					P_e = \frac{1}{2} erfc \left[ \frac{A_c}{\sqrt{2}\sigma}\right]
+				\end{equation}
+				Bandwidth is $2B_T$ like ASK.
+
+				The energy per bit $E_b$ is given as
+				\begin{equation}
+					P_e = \frac{1}{2} erfc \left[ \frac{E-b}{N_0}\right]
+				\end{equation}
+
+		To increase throughput with a limited bandwidth, use multiple levels. Can implement  encoding schemes.
+
+		Constellation diagrams are used.
+
+		PSK can be extended to multiple phase shifts, such as \ang{45} rather than \ang{180}.
+
+		QAM uses phase and amplitude to achieve multiple levels per transmission. Uses phase and amplitude.
+	\section{Part 4}
+		\subsection{ECC}
+			Achieve detection and correction of errors by adding extra data and redundancy.
+
+			To achieve increased throughput (data rate must be trebled for 3x redundancy), BER goes up gives a disadvantage.
+
+			\subsubsection{Parity}
+				Using a block check byte or in conjunction with per-word parity, can detect and correct errors
+
+			\subsubsection{Linear Block Codes}
+				Uses addition (XOR, so no carry) and multiplcation (AND).
+
+				For a souce of M messages of length k ($M=2^k$), then with $r$ redundant bits, the message length is $2^{k+r}$. Bit rate is increaesed to $\frac{k+r}{k}$ times the uncoded rate - original message is still present. $n=k+r$
+
+				Hamming distance $d_{min}$ is the minimum difference between any pair of codes in a given set.
+
+				Given $D$ errors in recieved codeword, if we can detect with certainty that the received codeword is not valid when
+				\begin{equation}
+					D \le d_{min} -1
+				\end{equation}
+				 $t$ erors can be detected when
+				 \begin{equation}
+				 	2t+1 \le d_{min} \le 2t+2
+				 \end{equation}
+				 and
+				 \begin{equation}
+				 	d_{min} \le n-k+r
+				 \end{equation}
+
+				 Generators
+
+				 \begin{equation}
+				 	\mathbf{A} = \begin{bmatrix} a_1 & a_2 & \ldots & a_k \end{bmatrix}
+				 \end{equation}
+				 encode via a generator matrix
+				 \begin{equation}
+				 	\mathbf{T} = \mathbf{A} \cdot \mathbf{G}
+				 \end{equation}
+				 For (7,4),
+				 \begin{equation}
+				 	\mathbf{T} = \begin{bmatrix} a_1 & a_2 & a_3& a_4 & c_1& c_2& c_3\end{bmatrix}
+				 \end{equation}
+
 
 \section{Part 5}
 \subsection{Data Compression and Cryptography}
