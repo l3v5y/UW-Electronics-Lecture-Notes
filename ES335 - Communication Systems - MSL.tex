@@ -1,0 +1,139 @@
+\documentclass[a4paper]{article}
+
+\input{./preamble}
+\title{ES335 \\ Communication Systems \\ MSL}
+\input{./author}
+
+\newcommand{\infint}{ \int_{-\infty}^{\infty}}
+\begin{document}
+	\section{Part 1}
+		\subsection{Motivation}
+			How long does it take to double anything
+			\begin{equation}
+				\left( 1+\frac{x}{100}\right)^n = 2
+			\end{equation}
+			Where $x$ is the growth rate and $n$ is the number of years.
+			\begin{equation}
+				n \approx \frac{70}{x}
+			\end{equation}
+
+		\subsection{Fundamental Concepts}
+			For a probability distribution
+			\begin{equation}
+				\infint f(x) dx =1
+			\end{equation}
+
+			Expectation $E[X]$ and variance $\sigma^2$ are given in the databook.
+
+			\subsubsection{Fourier Transforms}
+				Fourier Transforms (F) changes between time domain and frequency domain
+
+				\begin{align}
+					X(f)= F \left\{ x(t) \right\} & = \infint x(t)e^{-j 2 \pi f t} dt\\
+					x(t) = F ^{-1}\left\{ X(f) \right\} & = \infint X(f)e^{j 2 \pi f t} dt
+				\end{align}
+
+			\subsubsection{Delta function}
+				Infinitesimally brief
+				\begin{equation}
+					\delta (x-a)=a \qquad x\ne a
+				\end{equation}
+
+				Normalised
+				\begin{equation}
+					\infint 	\delta (x-a) dx = 1
+				\end{equation}
+
+				Sifting
+				\begin{equation}
+					\infint f(x) \delta(x-a)dx =f(a)
+				\end{equation}
+
+				Fourier transform of delta function
+				\begin{equation}
+					\infint \delta (f \pm f_0) e^{\pm j 2 \pi f \tau} df = e^{\pm j 2 \pi f_0 \tau}
+				\end{equation}
+
+			\subsubsection{Transfer function}
+				The FT of an impulse response is the transfer function
+
+				For an RC circuit the impulse  is given by \cref{eq:rc_ir}.
+				\begin{equation}
+					h(t) = \frac{1}{RC}e^{-\frac{t}{RC}} \qquad t\ge 0 \label{eq:rc_ir}
+				\end{equation}
+
+				The transfer function is given by \cref{eq:rc_tf}
+				\begin{equation}
+					H(t) = \frac{1}{1+j2\pi f RC}\label{eq:rc_tf}
+				\end{equation}
+			\subsubsection{Autocorrelation}
+				Measure of signal similarity at different times
+				\begin{align}
+					R_{ff}(\tau) &= \infint f(t+\tau)f^\ast(t) d\tau \\
+					R_{ff}(\tau) &= \infint f(t)f^\ast(t-\tau) d\tau
+				\end{align}
+				Where $f^\ast$ represents the complex conjugate (real function, $f\ast = f$).
+
+				Also,
+				\begin{equation}
+					R_{xx} = E \left\{ x(t)x(t-\tau) \right\}=E \left\{x(t+\tau)x(t)\right\}
+				\end{equation}
+
+				Can be written as $R_x(\tau)$
+			\subsubsection{Signal Energey and Power}
+				The energy of a signal is given by
+				\begin{equation}
+					E = \infint \left| f(t)\right|^2 dt \mathrm{Joules}
+				\end{equation}
+				which is a slight problem for infinitely long signals, so practaically,
+				\begin{equation}
+					P =\lim_{T \to \infty} \frac{1}{T} \int^{\frac{T}{2}}_{-\frac{T}{2}} \left| f(t)\right|^2 dt \mathrm{Watts}
+				\end{equation}
+
+				The DC power is given from the autocorrelation function
+				\begin{equation}
+					\lim_{\tau \to \pm\infty}\left\{ R_{x}(\tau) \right\}
+				\end{equation}
+				and the mean power is given as
+				\[R_x(0)\]
+
+			\subsubsection{Parsevcal's Theorem}
+				\begin{equation}
+					E =  \infint \left| f(t)\right|^2 dt =
+					\infint \underbrace{ \left| F(t)\right|^2 }_{\text{Energy Density}} df \mathrm{Joules}
+				\end{equation}
+				or
+				\begin{equation}
+					P =\lim_{T \to \infty} \frac{1}{T} \int^{\frac{T}{2}}_{-\frac{T}{2}} \left| f(t)\right|^2 dt =
+					\infint \underbrace{ \left| S(f)\right| }_{\text{Power Spectral Density}} df
+					\mathrm{Watts}
+				\end{equation}
+			\subsubsection{Wiener-Kinchine Theorem}
+				For random signals, the autocorelation function and PSD form a Fourier transform pair
+					\begin{align}
+						P(f) &= F(R(\tau)) \\
+						R(\tau) &= F^{-1}(P(f))
+					\end{align}
+			\subsection{Digitisation}
+				Sample is quantised into multiple steps
+				\subsubsection{Sampling}
+				SQER is given by
+					\begin{equation}
+						sqer = \frac{3N^2}{2}
+					\end{equation}
+				Where N is the number of steps between limits.
+
+				Highest frequency measurable is signal rate divided by 2 word length
+
+\section{Part 2}
+\subsection{Baseband Pulse Transmission}
+
+\section{Part 3}
+\subsection{Modulated Data Transmission}
+
+\section{Part 4}
+\subsection{ECC}
+
+\section{Part 5}
+\subsection{Data Compression and Cryptography}
+\end{document}

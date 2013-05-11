@@ -1,0 +1,62 @@
+\usepackage[utf8]{inputenc} % set input encoding (not needed with XeLaTeX)
+
+\usepackage{amsmath}
+
+\usepackage[margin=0.8in]{geometry}
+
+\geometry{a4paper}
+
+\ifxetex
+  \usepackage{fontspec}
+  \usepackage{xunicode}
+  \defaultfontfeatures{Mapping=tex-text} % To support LaTeX quoting style
+  \setmainfont{Cambria}
+\else
+\fi
+
+\usepackage{graphicx}
+\graphicspath{{gfx/}}
+
+\usepackage{booktabs} 
+\usepackage{array}
+\usepackage{paralist}
+\usepackage{verbatim}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{subfloat}
+\usepackage{url}
+\usepackage{lscape}
+\usepackage{amsmath}
+\usepackage{fancyhdr}
+\usepackage{pgfplots}
+\usepackage{siunitx}
+\usepackage{tikz}
+\usetikzlibrary{positioning,decorations.pathreplacing,shapes,patterns}
+\usepackage[europeanresistors,americaninductors,siunitx]{circuitikz}
+\usepackage{amssymb}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0pt}
+\lhead{}\chead{\date{}}\rhead{1006511}
+
+
+\usepackage[hidelinks]{hyperref}
+\usepackage[sort&compress,capitalise,noabbrev]{cleveref}
+
+\usepackage{tabularx}
+\newcolumntype{R}{>{\raggedleft\arraybackslash}X}%
+
+\usepackage{setspace}
+\singlespacing
+
+% Some macros to make re-spacing a little easier
+\usepackage{setspace}
+% set to singlespace for normal and doublespace for submission
+\newcommand{\customspacing}{doublespace}
+\newcommand{\bs}{\begin{\customspacing}}
+\newcommand{\es}{\end{\customspacing}}
+
+\let\Contentsline\contentsline
+\renewcommand\contentsline[3]{\Contentsline{#1}{#2}{#3}}
+
+\usepackage{url}
+\usepackage{eurosym}
